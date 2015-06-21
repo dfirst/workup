@@ -15,32 +15,31 @@
 
         <!-- Favicon -->
         <link rel="icon" type="image/png" href="{% static "favicon.png" %}">
+        <!-- Essential styles -->
+        <link rel="stylesheet" href="{% static "assets/bootstrap/css/bootstrap.min.css" %}" type="text/css">
+        <link rel="stylesheet" href="{% static "font-awesome/css/font-awesome.min.css" %}" type="text/css">
+        <link rel="stylesheet" href="{% static "assets/fancybox/jquery.fancybox.v=2.1.5.css" %}" media="screen">
 
-        {% compress css %}
-            <!-- Essential styles -->
-            <link rel="stylesheet" href="{% static "assets/bootstrap/css/bootstrap.min.css" %}" type="text/css">
-            <link rel="stylesheet" href="{% static "font-awesome/css/font-awesome.min.css" %}" type="text/css">
-            <link rel="stylesheet" href="{% static "assets/fancybox/jquery.fancybox.v=2.1.5.css" %}" media="screen">
+        <!-- Boomerang styles -->
+        <link id="wpStylesheet" type="text/css" href="{% static "css/global-style.css" %}" rel="stylesheet" media="screen">
 
-            <!-- Boomerang styles -->
-            <link id="wpStylesheet" type="text/css" href="{% static "css/global-style.css" %}" rel="stylesheet" media="screen">
-            <!-- Assets -->
-            <link rel="stylesheet" href="{% static "assets/owl-carousel/owl.carousel.css" %}">
-            <link rel="stylesheet" href="{% static "assets/owl-carousel/owl.theme.css" %}">
-            <link rel="stylesheet" href="{% static "assets/sky-forms/css/sky-forms.css" %}">
-            <link rel="stylesheet" href="{% static "assets/ui-kit/css/video-js.css" %}">
-            <!--[if lt IE 9]>
+        <!-- Assets -->
+        <link rel="stylesheet" href="{% static "assets/owl-carousel/owl.carousel.css" %}">
+        <link rel="stylesheet" href="{% static "assets/owl-carousel/owl.theme.css" %}">
+        <link rel="stylesheet" href="{% static "assets/sky-forms/css/sky-forms.css" %}">
+        <link rel="stylesheet" href="{% static "assets/ui-kit/css/video-js.css" %}">
+
+        <!--[if lt IE 9]>
                 <link rel="stylesheet" href="{% static "assets/sky-forms/css/sky-forms-ie8.css" %}">
-            <![endif]-->
-            {% if LANGUAGE_BIDI %}
-                <link rel="stylesheet" href="{% static "css/rtl.css" %}">
-            {% endif %}
-            <!-- workup CSS -->
-            <link rel="stylesheet" type="text/css" href="{% static "css/workup.css" %}">
+        <![endif]-->
 
-            {% block extra_css %}{% endblock %}
-        {% endcompress %}
+        {% if LANGUAGE_BIDI %}
+            <link rel="stylesheet" href="{% static "css/rtl.css" %}">
+        {% endif %}
 
+        <!-- workup CSS -->
+        <link rel="stylesheet" type="text/css" href="{% static "css/workup.css" %}">
+        {% block extra_css %}{% endblock %}
 
         {% compress js %}
             <!-- Required JS -->
@@ -48,8 +47,8 @@
             <script src="{% static "js/jquery-ui.min.js" %}"></script>
             <!-- workup JS -->
             <script src="{% static "js/workup.js" %}"></script>
-            {% block extra_js %}{% endblock %}
         {% endcompress %}
+        {% block extra_js %}{% endblock %}
     </head>
     <body id="{% block body_id %}body{% endblock %}">
         <!-- MODALS -->
