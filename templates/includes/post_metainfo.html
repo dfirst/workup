@@ -1,0 +1,22 @@
+{% load i18n future mezzanine_tags blog_tags keyword_tags %}
+                    <div class="post-tags">
+                    {% block blog_post_list_post_metainfo %}
+                        {% with blog_post.categories.all as categories %}
+                            {% if categories %}
+                                {% trans "Categories" %}:
+                                {% for category in categories %}
+                                    <a href="{% url "blog_post_list_category" category.slug %}">{{ category }}</a>{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                        {% keywords_for blog_post as tags %}
+                        {% if tags %}
+                        {% trans "Tags" %}:
+                        {% spaceless %}
+                            {% for tag in tags %}
+                                <a href="{% url "blog_post_list_tag" tag.slug %}" class="tag">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% endspaceless %}
+                        {% endif %}
+                    {% endblock %}
+                    </div>

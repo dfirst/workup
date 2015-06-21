@@ -1,0 +1,66 @@
+{% load mezzanine_tags staticfiles %}
+
+        <!-- For working well need to save -->
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+        {% compress js %}
+        <!-- Essentials -->
+        <script src="{% static "js/modernizr.custom.js" %}"></script>
+        <script src="{% static "assets/bootstrap/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "js/jquery.mousewheel-3.0.6.pack.js" %}"></script>
+        <script src="{% static "js/jquery.easing.js" %}"></script>
+        <script src="{% static "js/jquery.metadata.js" %}"></script>
+        <script src="{% static "js/jquery.hoverup.js" %}"></script>
+        <script src="{% static "js/jquery.hoverdir.js" %}"></script>
+        <script src="{% static "js/jquery.stellar.js" %}"></script>
+
+        <!-- Boomerang mobile nav - Optional  -->
+        <script src="{% static "assets/responsive-mobile-nav/js/jquery.dlmenu.js" %}"></script>
+        <script src="{% static "assets/responsive-mobile-nav/js/jquery.dlmenu.autofill.js" %}"></script>
+
+        <!-- Forms -->
+        <script src="{% static "assets/ui-kit/js/jquery.powerful-placeholder.min.js" %}"></script>
+        <script src="{% static "assets/ui-kit/js/cusel.min.js" %}"></script>
+        <script src="{% static "assets/sky-forms/js/jquery.form.min.js" %}"></script>
+        <script src="{% static "assets/sky-forms/js/jquery.validate.min.js" %}"></script>
+        <script src="{% static "assets/sky-forms/js/jquery.maskedinput.min.js" %}"></script>
+        <script src="{% static "assets/sky-forms/js/jquery.modal.js" %}"></script>
+
+        <!-- Assets -->
+        <script src="{% static "assets/hover-dropdown/bootstrap-hover-dropdown.min.js" %}"></script>
+        <script src="{% static "assets/page-scroller/jquery.ui.totop.min.js" %}"></script>
+        <script src="{% static "assets/mixitup/jquery.mixitup.js" %}"></script>
+        <script src="{% static "assets/mixitup/jquery.mixitup.init.js" %}"></script>
+        <script src="{% static "assets/fancybox/jquery.fancybox.pack.v=2.1.5.js" %}"></script>
+        <script src="{% static "assets/waypoints/waypoints.min.js" %}"></script>
+        <script src="{% static "assets/milestone-counter/jquery.countTo.js" %}"></script>
+        <script src="{% static "assets/easy-pie-chart/js/jquery.easypiechart.js" %}"></script>
+        <script src="{% static "assets/social-buttons/js/rrssb.min.js" %}"></script>
+        <script src="{% static "assets/nouislider/js/jquery.nouislider.min.js" %}"></script>
+        <script src="{% static "assets/owl-carousel/owl.carousel.js" %}"></script>
+        <script src="{% static "assets/bootstrap/js/tooltip.js" %}"></script>
+        <script src="{% static "assets/bootstrap/js/popover.js" %}"></script>
+        {% endcompress %}
+        <!-- Sripts for individual pages, depending on what plug-ins are used -->
+
+        <!-- Boomerang App JS -->
+        <script src="{% static "js/wp.app.js" %}"></script>
+        <!--[if lt IE 9]>
+            <script src="{% static "js/html5shiv.js" %}"></script>
+            <script src="{% static "js/respond.min.js" %}"></script>
+        <![endif]-->
+
+        <script>
+        {% if settings.GOOGLE_ANALYTICS_ID and not request.user.is_staff %}
+        var _gaq = _gaq || [['_trackPageview']];
+        _gaq.unshift(['_setAccount', '{{ settings.GOOGLE_ANALYTICS_ID }}']);
+        (function(d, t) {
+            var g = d.createElement(t),
+                s = d.getElementsByTagName(t)[0];
+            g.async = true;
+            g.src = '//www.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g, s);
+        })(document, 'script');
+        {% endif %}
+        </script>

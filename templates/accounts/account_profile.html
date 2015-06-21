@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load i18n future mezzanine_tags accounts_tags comments %}
+
+{% block meta_title %}{{ profile_user|username_or:"get_full_name" }}{% endblock %}
+{% block title %}{{ profile_user|username_or:"get_full_name" }}{% endblock %}
+{% block body_id %}account{% endblock %}
+
+{% block breadcrumb_menu %}
+    {{ block.super }}
+    <li>{{ profile_user|username_or:"get_full_name" }}</li>
+{% endblock %}
+
+{% block main %}
+<section class="slice bg-white">
+        <div class="wp-section user-account">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="user-profile-img">
+                            <img src="{{ MEDIA_URL }}{% thumbnail profile_user.userprofile.avatar 263 263 %}" alt="">
+                        </div>
+                        <ul class="categories mt-20">
+                            <li><a href="{% url "profile" profile_user.username %}">Персональная информация</a></li>
+                            {% if profile_user == request.user %}
+                                <li><a href="{% url "profile_update" %}">{% trans "Update profile" %}</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="tabs-framed">
+                            <ul class="tabs clearfix">
+                                {% url "profile" profile_user as user_profile_url %}
+                                <li {% if request.path == user_profile_url %}class="active"{% endif %}><a href="{% url "profile" profile_user.username %}">Персональная информация</a></li>
+                                {% url "topic_list_user" profile_user as user_topics_url %}
+                                <li {% if request.path == user_topics_url %}class="active"{% endif %}><a href="{% url "topic_list_user" profile_user %}">Темы пользователя</a></li>
+                                {% url "comment_list_user" profile_user as user_comments_url %}
+                                <li {% if request.path == user_comments_url %}class="active"{% endif %}><a href="{% url "comment_list_user" profile_user %}">Комментарии пользователя</a></li>
+                            </ul>
+                            {% block profile_content %}
+                                <div class="tab-content">
+                                    <div class="tab-pane fade in active">
+                                        <div class="tab-body">
+                                            <dl class="dl-horizontal style-2">
+                                                <h3 class="title title-lg">{{ profile_user.get_full_name }}</h3>
+                                                <p class="mb-20">Публичная информация</p>
+                                                {% with profile_user.userprofile as userprofile  %}
+                                                    <dt>О себе</dt>
+                                                    <dd>
+                                                        <span class="pull-left">{{ userprofile.bio|richtext_filter|safe }}</span>
+                                                        <a href="{% url "profile_update" %}" class="btn btn-xs btn-base btn-icon fa-edit pull-right"><span>Изменить</span></a>
+                                                    </dd>
+                                                    <hr>
+                                                    <dt>Дата рождения</dt>
+                                                    <dd>
+                                                        <span class="pull-left">{{ userprofile.date_of_birth }}</span>
+                                                        <a href="{% url "profile_update" %}" class="btn btn-xs btn-base btn-icon fa-edit pull-right"><span>Изменить</span></a>
+                                                    </dd>
+                                                    <hr>
+                                                    <dt>Карма</dt>
+                                                    <dd>
+                                                        <span class="pull-left">{{ userprofile.karma }}</span>
+                                                    </dd>
+                                                {% endwith %}
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+{% endblock %}

@@ -1,0 +1,218 @@
+{% load pages_tags mezzanine_tags i18n future staticfiles %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}"{% if LANGUAGE_BIDI %} dir="rtl"{% endif %}>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
+        <meta name="description" content="{% block meta_description %}{% endblock %}">
+        <title>{% block meta_title %}{% endblock %}{% if settings.SITE_TITLE %} | {{ settings.SITE_TITLE }}{% endif %}</title>
+
+        {% ifinstalled mezzanine.blog %}
+            <link rel="alternate" type="application/rss+xml" title="RSS" href="{% url "blog_post_feed" "rss" %}">
+            <link rel="alternate" type="application/atom+xml" title="Atom" href="{% url "blog_post_feed" "atom" %}">
+        {% endifinstalled %}
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{% static "favicon.png" %}">
+
+        {% compress css %}
+            <!-- Essential styles -->
+            <link rel="stylesheet" href="{% static "assets/bootstrap/css/bootstrap.min.css" %}" type="text/css">
+            <link rel="stylesheet" href="{% static "font-awesome/css/font-awesome.min.css" %}" type="text/css">
+            <link rel="stylesheet" href="{% static "assets/fancybox/jquery.fancybox.v=2.1.5.css" %}" media="screen">
+
+            <!-- Boomerang styles -->
+            <link id="wpStylesheet" type="text/css" href="{% static "css/global-style.css" %}" rel="stylesheet" media="screen">
+            <!-- Assets -->
+            <link rel="stylesheet" href="{% static "assets/owl-carousel/owl.carousel.css" %}">
+            <link rel="stylesheet" href="{% static "assets/owl-carousel/owl.theme.css" %}">
+            <link rel="stylesheet" href="{% static "assets/sky-forms/css/sky-forms.css" %}">
+            <link rel="stylesheet" href="{% static "assets/ui-kit/css/video-js.css" %}">
+            <!--[if lt IE 9]>
+                <link rel="stylesheet" href="{% static "assets/sky-forms/css/sky-forms-ie8.css" %}">
+            <![endif]-->
+            {% if LANGUAGE_BIDI %}
+                <link rel="stylesheet" href="{% static "css/rtl.css" %}">
+            {% endif %}
+            <!-- workup CSS -->
+            <link rel="stylesheet" type="text/css" href="{% static "css/workup.css" %}">
+
+            {% block extra_css %}{% endblock %}
+        {% endcompress %}
+
+
+        {% compress js %}
+            <!-- Required JS -->
+            <script src="{% static "js/jquery.js" %}"></script>
+            <script src="{% static "js/jquery-ui.min.js" %}"></script>
+            <!-- workup JS -->
+            <script src="{% static "js/workup.js" %}"></script>
+            {% block extra_js %}{% endblock %}
+        {% endcompress %}
+    </head>
+    <body id="{% block body_id %}body{% endblock %}">
+        <!-- MODALS -->
+        <!-- MOBILE MENU - Option 2
+        <section id="navMobile" class="aside-menu left">
+            <form class="form-horizontal form-search">
+                <div class="input-group">
+                    <input type="search" class="form-control" placeholder="Search...">
+                    <span class="input-group-btn">
+                    <button id="btnHideMobileNav" class="btn btn-close" type="button" title="Hide sidebar"><i class="fa fa-times"></i></button>
+                </span>
+                </div>
+            </form>
+            <div id="dl-menu" class="dl-menuwrapper">
+                <ul class="dl-menu"></ul>
+            </div>
+        </section> -->
+
+        <!-- SLIDEBAR -->
+        {% include "slidebar.html" %}
+        <!-- MAIN WRAPPER -->
+        <div class="body-wrap">
+            <!-- HEADER -->
+            <div id="divHeaderWrapper">
+                <header class="header-standard-2">
+                    <!-- MAIN NAV -->
+                    <div class="navbar navbar-wp navbar-arrow mega-nav" role="navigation">
+                        <div class="container">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle navbar-toggle-aside-menu">
+                                    <i class="fa fa-outdent icon-custom"></i>
+                                </button>
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                    <i class="fa fa-bars icon-custom"></i>
+                                </button>
+                                <a class="navbar-brand text-center" href="#" title="Go 'N' Print">
+                                    <h1 class="logos">Go <span class="text-danger">'N'</span> Print</h1>
+                                </a>
+                            </div>
+                            <div class="navbar-collapse collapse">
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li class="hidden-md hidden-lg">
+                                        <div class="bg-light-gray">
+                                            <form class="form-horizontal form-light p-15" role="form" action="{% url "search" %}">
+                                                <div class="input-group input-group-lg">
+                                                    <input class="form-control" placeholder="{% trans "Search" %}" type="text" name="q" value="{{ request.REQUEST.q }}">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-white" type="submit">
+                                                            <i class="fa fa-search"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </li>
+                                    {% page_menu "pages/menus/dropdown.html" %}
+                                    {% search_form "all" %}
+                                    <li class="dropdown-aux">
+                                        <a href="#" id="cmdAsideMenu" class="dropdown-toggle dropdown-form-toggle" title="Open slidebar">
+                                            <i class="fa fa-outdent"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!--/.nav-collapse -->
+                        </div>
+                    </div>
+                </header>
+            </div>
+
+            <!-- Optional header components (ex: slider) -->
+
+            <!-- MAIN CONTENT -->
+            <div class="pg-opt">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <h2>{% block title %}{% endblock %}</h2>
+                        </div>
+                        <div class="col-xs-6">
+                            <ol class="breadcrumb">
+                                {% block breadcrumb_menu %}{% page_menu "pages/menus/breadcrumb.html" %}{% endblock %}
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="slice bg-white">
+                <div class="wp-section">
+                    <div class="container">
+                        <div class="row">
+                            {% nevercache %}
+                                {% if messages %}
+                                    <div class="messages">
+                                        {% for message in messages %}
+                                            <div class="alert alert-dismissable alert-{{ message.tags }}" data-alert="alert">
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% endnevercache %}
+                            <div class="col-md-9">
+                                {% block main %}{% endblock %}
+                                <!-- JS works becouse of it -->
+                            </div>
+                            <div class="col-md-3">
+                                <div class="sidebar">
+                                    <!-- SIDEBAR - BLOG -->
+                                    {% block right_panel %}{% endblock %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="footer">
+                <div class="container">
+                    <div class="row">
+
+
+                        <div class="col-md-6">
+                            <div class="col col-social-icons">
+                                <h4>Мы в соцсетях</h4>
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-google-plus"></i></a>
+                                <a href="#"><i class="fa fa-linkedin"></i></a>
+                                <a href="#"><i class="fa fa-vk"></i></a>
+                                <a href="#"><i class="fa fa-skype"></i></a>
+                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                                <a href="#"><i class="fa fa-youtube-play"></i></a>
+                                <a href="#"><i class="fa fa-flickr"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col">
+                                <h4>О ресурсе</h4>
+                                <p class="no-margin">
+                                    Go 'N' Print — ресурс для людей которые хотят или уже связали свою жизнь с заграницей, если вы ищите: стажировки, волонтерские программы, работу заграницей или просто возможность свободно путешествовать, тогда этот ресурс для вас.
+                                    <br>
+                                    <br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-lg-9 copyright">
+                            2015 © Go 'N' Print. С наилучшими пожеланиями.
+                        </div>
+                        <div class="col-lg-3">
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        {% include "includes/footer_scripts.html" %}
+    </body>
+</html>

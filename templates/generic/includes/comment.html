@@ -1,0 +1,105 @@
+{% load i18n mezzanine_tags comment_tags rating_tags staticfiles %}
+
+<ol>
+    {% for comment in comments_for_thread %}
+        <li class="comment">
+            <div id="comment-{{ comment.id }}" class="comment-body bb">
+                {% if not comment.is_removed and comment.is_public or request.user.is_staff %}
+                    {% if comment.url %}
+                        <div class="comment-avatar">
+                            <a href="{{ comment.url }}">
+                                <img class="pull-left media-object" src="{% gravatar_url comment.email %}">
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="comment-avatar">
+                            <div class="avatar"><img src="{{ MEDIA_URL }}{% thumbnail comment.user.userprofile.avatar 65 65 %}" alt=""></div>
+                        </div>
+                    {% endif %}
+                    <div class="comment-text">
+                        <div class="comment-author clearfix">
+                            <a href="{% url "profile" comment.user.username %}" class="link-author" hidefocus="true" style="outline: none;">{{ comment.user.get_full_name|default:comment.user }}</a>
+                            {% if settings.COMMENTS_USE_RATINGS %}
+                                <span class="comment-meta">
+                                    <span class="comment-date inline-block">{% rating_for comment %}</span>
+                                </span>
+                            {% endif %}
+                        </div>
+                        <div class="comment-entry">
+                            {{ comment.comment|comment_filter }}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if not comment.is_removed and comment.is_public %}
+                    <span class="comment-meta">
+                        <span class="comment-date">
+                            {% blocktrans with sometime=comment.submit_date|timesince %}{{ sometime }} ago{% endblocktrans %} |
+                        </span>
+                        <a href="{{ request.path }}#comment-{{ comment.id }}">
+                            <span class="glyphicon glyphicon-link"></span> {% trans "Link" %}
+                        </a> |
+                        <a href="#reply-{{ comment.id }}" class="reply">
+                            <span class="glyphicon glyphicon-share-alt"></span> {% trans "Reply" %}
+                        </a>
+                        <form class="form-light comment-reply-form" method="post" id="reply-{{ comment.id }}" action="{{ comment_url }}#reply-{{ comment.id }}" {% if replied_to != comment.id %}style="display:none;"{% endif %}>
+                            {% if replied_to == comment.id %}
+                                {% csrf_token %}
+                                {% for hidden in posted_comment_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                                <input type="hidden" id="id_name" maxlength="50" name="name" type="text" value="{{ user.username }}" />
+                                <input type="hidden" id="id_email" name="email" type="email" value="{{ user.email }}" />
+                                <input type="hidden" id="id_url" name="url" type="url" />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Ваш ответ</label>
+                                            <textarea class="form-control" placeholder="Напишите ваш ответ здесь" rows="5" id="id_comment" name="comment"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% csrf_token %}
+                                {% for hidden in unposted_comment_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                                <input type="hidden" id="id_name" maxlength="50" name="name" type="text" value="{{ user.username }}" />
+                                <input type="hidden" id="id_email" name="email" type="email" value="{{ user.email }}" />
+                                <input type="hidden" id="id_url" name="url" type="url" />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Ваш ответ</label>
+                                            <textarea class="form-control" placeholder="Напишите ваш ответ здесь" rows="5" id="id_comment" name="comment"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="hidden" name="replied_to" value="{{ comment.id }}">
+                                    <input class="btn btn-base btn-icon btn-send pull-right" type="submit" value="{% trans "Reply" %}">
+                                </div>
+                            </div>
+                        </form>
+                    </span>
+                {% else %}
+                        {% if comment.is_removed %}
+                            <span class="glyphicon glyphicon-remove-circle"></span> {% trans "Comment deleted" %}
+                        {% else %}
+                            <span class="glyphicon glyphicon-warning-sign"></span> {% trans "Comment awaiting approval" %}
+                        {% endif %}
+                        <small class="timespan">{% blocktrans with sometime=comment.submit_date|timesince %}{{ sometime }} ago{% endblocktrans %}</small>
+                {% endif %}
+                {% if not comment.is_removed and comment.is_public or request.user.is_staff %}{% endif %}
+            </div>
+            {% comment_thread comment %}
+        </li>
+    {% endfor %}
+</ol>
+
+{% if no_comments %}
+    <p>{% trans "There are currently no comments" %}</p>
+{% endif %}

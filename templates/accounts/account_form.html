@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load i18n mezzanine_tags %}
+
+{% block meta_title %}{{ title }}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
+{% block body_id %}account{% endblock %}
+
+{% block breadcrumb_menu %}
+    {{ block.super }}
+    <li>{{ title }}</li>
+{% endblock %}
+
+{% block main %}
+    <section class="slice bg-white">
+        <div class="wp-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2 col-sm-6 col-sm-offset-3">
+                        <div class="wp-block default user-form no-margin">
+                            <div class="form-header">
+                                <h2>{{ title }}</h2>
+                            </div>
+                            {% errors_for form %}
+                            <div class="form-body">
+                                <form class="sky-form"  method="post"{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
+                                    <fieldset class="no-padding">
+                                        <section>
+                                            {% nevercache %}
+                                                <input type="hidden" name="referrer" value="{{ request.META.HTTP_REFERER }}">
+                                                {% csrf_token %}
+                                            {% endnevercache %}
+                                            {% for field in form %}
+                                                {% if field.is_hidden %}
+                                                    {{ field }}
+                                                {% else %}
+                                                    <div class="form-group input_{{ field.id_for_label }} {{ field.field.type }}
+                                                        {% if field.errors %} has-error{% endif %}">
+                                                        {% if field.label %}
+                                                            <label class="label" for="{{ field.auto_id }}">
+                                                                {{ field.label }}
+                                                            </label>
+                                                        {% endif %}
+                                                        <label class="input" for="file">
+                                                            {{ field }}
+                                                        </label>
+                                                        {% if field.errors %}
+                                                            <p class="help-block">
+                                                                {% for e in field.errors %}
+                                                                    {% if not forloop.first %} / {% endif %}{{ e }}
+                                                                {% endfor %}
+                                                            </p>
+                                                        {% elif field.help_text %}
+                                                            <p class="help-block">{{ field.help_text }}</p>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </section>
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <section>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    {% block account_form_actions %}
+                                                        <button class="btn btn-base btn-icon btn-icon-right btn-icon-go pull-right" type="submit">
+                                                            <span>{{ title }}</span>
+                                                        </button>
+                                                    {% endblock %}
+                                                </div>
+                                        </section>
+                                    </fieldset>
+                                </form>
+                            </div>
+                            <div class="form-footer">
+                                {% block form_footer %}
+                                {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

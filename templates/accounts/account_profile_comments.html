@@ -1,0 +1,31 @@
+{% extends "accounts/account_profile.html" %}
+{% load mezzanine_tags rating_tags forum_tags future %}
+{% block profile_content %}
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <div class="tab-body">
+                <h3 class="title title-lg">{{ profile_user.get_full_name }}</h3>
+                <p class="mb-20">Комментарии пользователя {{ profile_user.get_full_name }}</p>
+                <div class="row">
+                    <!-- Product list -->
+                    <div class="col-md-12">
+                        <ol>
+                            {% for comment in object_list %}
+                                <li class="comment">
+                                    <div class="comment-body bb">
+                                        <div class="comment-entry">
+                                            <a href="{{ comment.get_absolute_url }}">{{ comment.comment }}</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% empty %}
+                                <p>{{ no_data }}</p>
+                            {% endfor %}
+                        </ol>
+                        {% pagination_for object_list %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

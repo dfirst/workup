@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% load i18n future mezzanine_tags blog_tags keyword_tags disqus_tags hitcount_tags %}
+
+{% block meta_title %}
+    {% if page %}
+        {{ page.meta_title }}
+    {% else %}
+        {% trans "Blog" %}
+    {% endif %}
+{% endblock %}
+
+{% block meta_keywords %}
+    {% metablock %}
+        {% keywords_for page as keywords %}
+        {% for keyword in keywords %}
+            {% if not forloop.first %}, {% endif %}
+            {{ keyword }}
+        {% endfor %}
+    {% endmetablock %}
+{% endblock %}
+
+{% block meta_description %}
+    {% metablock %}
+        {{ page.description }}
+    {% endmetablock %}
+{% endblock %}
+
+{% block title %}
+    {% if page %}
+        {{ page.title }}
+    {% else %}
+        {% trans "Blog" %}
+    {% endif %}
+    {% if tag or category or year or month or author %}
+        {% block blog_post_list_filterinfo %}
+            <small>
+                {% if tag %}
+                    {% trans "Viewing posts tagged" %} {{ tag }}
+                {% else %}
+                    {% if category %}
+                        {% trans "Viewing posts for the category" %} {{ category }}
+                    {% else %}
+                        {% if year or month %}
+                            {% trans "Viewing posts from" %}
+                            {% if month %}
+                                {{ month }},
+                            {% endif %}
+                            {{ year }}
+                        {% else %}
+                            {% if author %}
+                                {% trans "Viewing posts by" %}
+                                {{ author.get_full_name|default:author.username }}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </small>
+        {% endblock %}
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumb_menu %}
+    {{ block.super }}
+    {% if tag or category or year or month or author %}
+        <li>
+            {% spaceless %}
+                {% if tag %}
+                    {% trans "Tag:" %} {{ tag }}
+                {% else %}
+                    {% if category %}
+                        {% trans "Category:" %} {{ category }}
+                    {% else %}
+                        {% if year or month %}
+                            {% if month %}
+                                {{ month }},
+                            {% endif %}
+                            {{ year }}
+                        {% else %}
+                            {% if author %}
+                                {% trans "Author:" %} {{ author.get_full_name|default:author.username }}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endspaceless %}
+        </li>
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    <!-- Standard image post example -->
+    {% for blog_post in blog_posts.object_list %}
+        <div class="post-item style2">
+            <div class="post-meta hidden-xs">
+                <div class="date">
+                    <span class="icon"><i class="fa fa-calendar"></i></span>
+                    <span class="month">{% blocktrans with sometime=blog_post.publish_date|date:"M" %}{{ sometime }}{% endblocktrans %}</span>
+                    <span class="day">{% blocktrans with sometime=blog_post.publish_date|date:"j" %}{{ sometime }}{% endblocktrans %}</span>
+                </div>
+                <div class="like-box">
+                    <a href="#" class="btn btn-block btn-xs btn-base btn-icon btn-heart">
+                        <span>{{ blog_post.rating_sum }}</span>
+                    </a>
+                    <a href="#" class="btn btn-block btn-xs btn-base btn-icon fa-eye">
+                        <span>{% get_hit_count for blog_post %}</span>
+                    </a>
+                </div>
+            </div>
+            <div class="post-content-wr">
+                <div class="post-meta-top">
+                    <div class="post-image">
+                        {% if settings.BLOG_USE_FEATURED_IMAGE and blog_post.featured_image %}
+                            {% block blog_post_list_post_featured_image %}
+                                <a href="{{ blog_post.get_absolute_url }}">
+                                    <img src="{{ MEDIA_URL }}{% thumbnail blog_post.featured_image 1280 800 %}">
+                                </a>
+                            {% endblock %}
+                        {% endif %}
+                    </div>
+                    <h2 class="post-title">
+                        <a href="{{ blog_post.get_absolute_url }}">
+                            {% block blog_post_list_post_title %}
+                                {{ blog_post.title }}
+                            {% endblock %}
+                        </a>
+                    </h2>
+                </div>
+                <div class="post-content clearfix">
+                    {% include 'includes/post_metainfo.html' %}
+                    <div class="post-comments">
+                    {% if blog_post.allow_comments %}
+                        {% blocktrans count comments_count=blog_post.comments_count %}
+                            <strong>{{ comments_count }}</strong> комментарий
+                            {% plural %}
+                            <strong>{{ comments_count }}</strong> комментариев
+                        {% endblocktrans %}
+                    {% endif %}
+                    </div>
+                    <div class="post-desc">
+                        {% block blog_post_list_post_content %}
+                            <!-- p comes from db -->
+                            {{ blog_post.description_from_content|safe }}
+                        {% endblock %}
+                    </div>
+                </div>
+
+                <div class="post-meta-bot clearfix">
+                {% block blog_post_list_post_links %}
+                    <span class="post-author">
+                        {% trans "Posted by" %}:
+                        {% with blog_post.user as author %}
+                            <a href="{% url "profile" author.username %}">{{ author.get_full_name|default:author.username }}</a>
+                        {% endwith %}
+                    </span>
+                    <a href="{{ blog_post.get_absolute_url }}" class="btn btn-sm btn-base">{% trans "read more" %}</a>
+                {% endblock %}
+                </div>
+
+            </div>
+        </div>
+    {% endfor %}
+    {% pagination_for blog_posts %}
+{% endblock %}
+
+{% block right_panel %}
+    {% include "blog/includes/filter_panel.html" %}
+{% endblock %}

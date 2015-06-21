@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% load mezzanine_tags i18n rating_tags keyword_tags forum_tags future %}
+
+{% block meta_title %}{{ title|default:"Форум" }}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
+{% block breadcrumb_menu %}
+    {{ block.super }}
+{% endblock %}
+{% block main %}
+    <div class="col-md-12">
+        <div class="btn-group">
+            <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">Выберите раздел форума: <span class="caret"></span></button>
+            <ul class="dropdown-menu noclose">
+                {% for category in categories %}
+                    <li><a href="{% url "topic_list_category" category.slug %}">{{ category }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="btn-group">
+            <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">Сортировать: <span class="caret"></span></button>
+            <ul class="dropdown-menu noclose">
+                <li><a href="{% url "topic_list_best" %}">Рейтингу</a></li>
+                <li><a href="{% url "topic_list_latest" %}">Новым</a></li>
+            </ul>
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-default" href="{% url "topic_create" %}">Новая тема</a>
+        </div>
+    </div>
+    <div class="col-md-12" style="height: 20px;"></div>
+    <div class="col-md-12">
+        <div class="section-title-wr">
+            <h3 class="section-title left"><span>Темы форума:</span></h3>
+        </div>
+        <ul class="popular">
+            {% for topic in object_list %}
+                <li>
+                    <h6>
+                        <a href="{% url "topic_detail" topic.slug %}" class="text-primary">{{ topic.title }}</a>
+                    </h6>
+                    <i>
+                        {% trans "Author:" %}
+                        <a class="profile" href="{% url "profile" topic.user.username %}">
+                            {{ topic.user.get_full_name|default:topic.user.username }}
+                        </a>
+                        {{ topic.publish_date|short_timesince }} {% trans "ago" %}
+                        {% keywords_for topic as tags %}
+                        {% if tags %}
+                            {% trans "Tags" %}:
+                            {% for tag in tags %}
+                                <a href="{% url "topic_list_tag" tag.slug %}">{{ tag }}</a> |
+                            {% endfor %}
+                        {% endif %}
+                        {% with topic.categories.all as categories %}
+                            {% if categories %}
+
+                                {% trans "Categories" %}:
+                                {% for category in categories %}
+                                    <a href="{% url "topic_list_category" category.slug %}">{{ category }}</a>{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                        <a class="comments" href="{{ topic.get_absolute_url }}">
+                            {{ topic.comments_count }} комментариев
+                        </a>
+                    </i>
+                </li>
+                <hr>
+            {% endfor %}
+        </ul>
+    </div>
+    {% pagination_for object_list %}
+{% endblock %}
+{% block right_panel %}
+    {% include "blog/includes/filter_panel.html" %}
+{% endblock %}

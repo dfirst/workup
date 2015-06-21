@@ -1,0 +1,98 @@
+{% extends "forum/topic_list.html" %}
+
+{% load mezzanine_tags rating_tags keyword_tags comment_tags forum_tags future i18n %}
+
+{% block meta_description %}
+    {% metablock %}
+        {{ object.description }}
+    {% endmetablock %}
+{% endblock %}
+
+{% block meta_title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block title %}
+    <a href="{{ object.url }}">{{ object.title }}</a>
+{% endblock %}
+
+{% block breadcrumb_menu %}
+    {{ block.super }}
+    <li class="active">{{ object.title }}</li>
+{% endblock %}
+
+{% block main %}
+    <div class="post-item">
+        <div class="post-content">
+            <h2 class="post-title">
+                <a href="#" hidefocus="true" style="outline: none;">
+                    {{ object.title }}
+                </a>
+            </h2>
+            {% block topic_detail_postedby %}
+                <span class="post-author">{% trans "Posted by" %}:
+                    {% with object.user as author %}
+                        <a href="{% url "profile" author.username %}" hidefocus="true" style="outline: none;">
+                            {{ author.get_full_name|default:author.username }}
+                        </a>
+                    {% endwith %}
+                </span>
+            {% endblock %}
+            <div class="post-tags">
+                {% block topic_list_post_metainfo %}
+                    {% with object.categories.all as categories %}
+                        {% if categories %}
+                            {% trans "Categories" %}:
+                            {% for category in categories %}
+                                <a href="{% url "topic_list_category" category.slug %}">{{ category }}</a>{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    {% keywords_for object as tags %}
+                    {% if tags %}
+                        {% trans "Tags" %}:
+                        {% spaceless %}
+                            {% for tag in tags %}
+                                <a href="{% url "topic_list_tag" tag.slug %}" class="tag">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% endspaceless %}
+                    {% endif %}
+                {% endblock %}
+            </div>
+            <div class="clearfix"></div>
+            <div class="post-desc">
+                {% block topic_detail_content %}
+                    {{ object.content|richtext_filters|safe }}
+                {% endblock %}
+            </div>
+        </div>
+        <hr>
+
+        <!-- Comments list section -->
+        <div class="comment-list clearfix" id="comments">
+
+            {% block topic_detail_commentlink %}
+                <h2>{{ object.comments_count }} комментариев</h2>
+                <a href="#comment" class="link-add-comment anchor" hidefocus="true" style="outline: none;">Присоединиться к обсуждению</a>
+            {% endblock %}
+
+            {% block topic_detail_rating %}
+                <div class="panel panel-default rating">
+                    <div class="panel-body">
+                        {% rating_for object %}
+                    </div>
+                </div>
+            {% endblock %}
+
+            {% block topic_detail_sharebuttons %}
+                {% set_short_url_for object %}
+                <a class="btn btn-social-icon btn-lg btn-vk" target="_blank" href="http://vk.com/share.php?url={{ object.short_url|urlencode }}" onclick="_gaq.push(['_trackEvent', 'btn-social-icon', 'click', 'btn-lg']);">
+                    <i class="fa fa-vk"></i> Опубликовать вконтакте
+                </a>
+            {% endblock %}
+
+            <!-- Comments list -->
+            {% comments_for object %}
+        </div>
+    </div>
+{% endblock %}

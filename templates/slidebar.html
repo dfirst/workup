@@ -1,0 +1,100 @@
+{% load pages_tags mezzanine_tags i18n future staticfiles blog_tags forum_tags %}
+        <section id="asideMenu" class="aside-menu right">
+            <form class="form-horizontal form-search">
+                <div class="input-group">
+                    <input type="search" class="form-control" placeholder="" />
+                    <span class="input-group-btn">
+                        <button id="btnHideAsideMenu" class="btn btn-close" type="button" title="Hide sidebar"><i class="fa fa-times"></i></button>
+                    </span>
+                </div>
+            </form>
+            <h5 class="side-section-title">Мы в соцсетях</h5>
+            <div class="social-media">
+                <a href="#"><i class="fa fa-vk facebook"></i></a>
+                <a href="#"><i class="fa fa-youtube google"></i></a>
+                <a href="#"><i class="fa fa-twitter twitter"></i></a>
+            </div>
+            <h5 class="side-section-title">Пульс сайта</h5>
+            <div class="panel-group sb-white" id="accordionThree">
+                <div class="panel panel-default sb-panel">
+                    <div class="panel-heading" style="background: #222 none repeat scroll 0% 0%;">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordionThree" href="#collapse3a" style="color: #ffffff">
+                                Последнии записи
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse3a" class="panel-collapse collapse sb-background">
+                        <div class="panel-body sb-white">
+                            <div class="nav">
+                                <ul>
+                                    {% blog_recent_posts 10 as recent_posts %}
+                                    {% if recent_posts %}
+                                        {% for recent_post in recent_posts  %}
+                                            {% spaceless %}
+                                                <li>
+                                                    <a href="">{{ recent_post.title }}</a>
+                                                </li>
+                                            {% endspaceless %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-heading" style="background: #222 none repeat scroll 0% 0%;">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordionThree" href="#collapse3b" style="color: #ffffff">
+                                Обсуждаемое
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse3b" class="panel-collapse collapse sb-background">
+                        <div class="panel-body sb-white">
+                            <div class="nav">
+                                <ul>
+                                    {% recent_comments_filter 10 as recent_comments %}
+                                    {% regroup recent_comments by content_object as recent_comments %}
+                                    {% if recent_comments %}
+                                        {% for comment in recent_comments %}
+                                            {% spaceless %}
+                                                <li>
+                                                    <a href="{{ comment.grouper.get_absolute_url }}">{{ comment.grouper }}</a>
+                                                </li>
+                                            {% endspaceless %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-heading" style="background: #222 none repeat scroll 0% 0%;">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordionThree" href="#collapse3с" style="color: #ffffff">
+                                Категории
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse3с" class="panel-collapse collapse sb-background">
+                        <div class="panel-body sb-white">
+                            <div class="nav">
+                                <ul>
+                                    {% block blog_categories %}
+                                        {% blog_categories as categories %}
+                                        {% if categories %}
+                                            {% for category in categories %}
+                                                <li>
+                                                    <a href="{% url "blog_post_list_category" category.slug %}">
+                                                        {{ category }} ({{ category.post_count }})
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endblock %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>

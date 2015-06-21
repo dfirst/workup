@@ -1,0 +1,129 @@
+{% load blog_tags keyword_tags mezzanine_tags i18n future forum_tags %}
+
+{% nevercache %}
+    {% include "includes/user_panel.html" %}
+{% endnevercache %}
+
+
+{% block blog_recent_posts %}
+    {% blog_recent_posts 30 as recent_posts %}
+    {% if recent_posts %}
+        <!-- Category news 2 -->
+        <div class="section-title-wr">
+            <h3 class="section-title left"><span>Популярное</span></h3>
+        </div>
+        <div class="mb-20">
+            {% for recent_post in recent_posts|dictsortreversed:"rating_sum"|slice:":3"  %}
+                {% spaceless %}
+                    <div class="wp-block article grid bb">
+                        <div class="article-image">
+                            {% if settings.BLOG_USE_FEATURED_IMAGE and recent_post.featured_image %}
+                                <img src="{{ MEDIA_URL }}{% thumbnail recent_post.featured_image 373 240 %}">
+                            {% endif %}
+                        </div>
+                        <h6 class="title">
+                            <a href="{{ recent_post.get_absolute_url }}">
+                                {{ recent_post.title|slice:":55" }}
+                            </a>
+                        </h6>
+                        <!-- p comes from db -->
+                        <a href="{{ recent_post.get_absolute_url }}">
+                            {{ recent_post.description_from_content|safe|slice:"3:140" }}
+                        </a>
+                    </div>
+                {% endspaceless %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block recent_comments %}
+    <div class="section-title-wr">
+        <h3 class="section-title left"><span>Последние комментарии</span></h3>
+    </div>
+    <div class="widget-container widget-recent widget-recent-boxed widget-recent-comments">
+		<div class="inner">
+			<ul>
+                {% recent_comments_filter 5 as recent_comments %}
+                {% if recent_comments %}
+                    {% for comment in recent_comments %}
+                        <li class="clearfix">
+                            <a href="{% url "profile" comment.user.username %}" class="post-thumb" hidefocus="true">
+                                <img src="{{ MEDIA_URL }}{% thumbnail comment.user.userprofile.avatar 72 72 %}" alt="">
+                            </a>
+                            <span class="comment-author"><a href="{% url "profile" comment.user.username %}" hidefocus="true">{{ comment.user.get_full_name|default:comment.user }}</a> commented</span>
+                            <span class="comment-entry">
+                                {{ comment.comment|slice:":100" }}
+                                <a href="{{ comment.get_absolute_url }}"><i class="glyphicon glyphicon-circle-arrow-right"></i></a>
+                            </span>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+			</ul>
+		</div>
+	</div>
+{% endblock %}
+
+{% block blog_categories %}
+    {% blog_categories as categories %}
+    {% if categories %}
+        <div class="section-title-wr">
+            <h3 class="section-title left"><span>{% trans "Categories" %}</span></h3>
+        </div>
+        <div class="widget">
+            <ul class="categories highlight">
+                {% for category in categories %}
+                    <li>
+                        <a href="{% url "blog_post_list_category" category.slug %}">
+                            {{ category }} ({{ category.post_count }})
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block blog_keywords %}
+    {% keywords_for blog.blogpost as tags %}
+    {% if tags %}
+        <div class="section-title-wr">
+            <h3 class="section-title left"><span>{% trans "Tags" %}</span></h3>
+        </div>
+        <div class="widget">
+            <div class="tagcloud base clearfix">
+                {% for tag in tags %}
+                    <a href="{% url "blog_post_list_tag" tag.slug %}" hidefocus="true" class="tag-weight-{{ tag.weight }}">
+                        <span>{{ tag }} ({{ tag.item_count }})</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block blog_feeds %}
+    <div class="panel panel-default user-panel">
+        <div class="panel-body">
+            <div class="section-title-wr">
+                <h3 class="section-title left"><span>{% trans "Feeds" %}</span></h3>
+            </div>
+            {% if tag %}
+                <a href="{% url "blog_post_feed_tag" tag.slug "rss" %}">{% trans "RSS" %}</a> /
+                <a href="{% url "blog_post_feed_tag" tag.slug "atom" %}">{% trans "Atom" %}</a>
+            {% endif %}
+            {% if category %}
+                <a href="{% url "blog_post_feed_category" category.slug "rss" %}">{% trans "RSS" %}</a> /
+                <a href="{% url "blog_post_feed_category" category.slug "atom" %}">{% trans "Atom" %}</a>
+            {% endif %}
+            {% if author %}
+                <a href="{% url "blog_post_feed_author" author.username "rss" %}">{% trans "RSS" %}</a> /
+                <a href="{% url "blog_post_feed_author" author.username "atom" %}">{% trans "Atom" %}</a>
+            {% endif %}
+            {% if not tag and not category and not author %}
+                <a href="{% url "blog_post_feed" "rss" %}">{% trans "RSS" %}</a> /
+                <a href="{% url "blog_post_feed" "atom" %}">{% trans "Atom" %}</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

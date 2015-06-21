@@ -1,0 +1,167 @@
+{% extends "blog/blog_post_list.html" %}
+{% load mezzanine_tags comment_tags keyword_tags rating_tags i18n future disqus_tags hitcount_tags staticfiles %}
+
+{% block meta_title %}
+    {{ blog_post.meta_title }}
+{% endblock %}
+
+{% block meta_keywords %}
+    {% metablock %}
+        {% keywords_for blog_post as tags %}
+        {% for tag in tags %}
+            {% if not forloop.first %}, {% endif %}{{ tag }}
+        {% endfor %}
+    {% endmetablock %}
+{% endblock %}
+
+{% block meta_description %}
+    {% metablock %}
+        {{ blog_post.description }}
+    {% endmetablock %}
+{% endblock %}
+
+{% block title %}
+    {{ blog_post.title }}
+{% endblock %}
+
+{% block breadcrumb_menu %}
+    {{ block.super }}
+    <li class="active">{{ blog_post.title }}</li>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'hitcount/hitcount-jquery.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+    {% insert_hit_count_js_variables for blog_post %}
+    <div class="post-item">
+        {% block blog_post_detail_featured_image %}
+            {% if settings.BLOG_USE_FEATURED_IMAGE and blog_post.featured_image %}
+                <div class="post-meta-top">
+                    <div class="post-image">
+                        <a href="{{ MEDIA_URL }}{% thumbnail blog_post.featured_image 700 350 %}" class="theater" title="Shoreline">
+                            <img src="{{ MEDIA_URL }}{% thumbnail blog_post.featured_image 700 350 %}" alt="">
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endblock %}
+        <div class="post-content">
+            <h2 class="post-title">
+                <a href="#" hidefocus="true" style="outline: none;">
+                    {{ blog_post.title }}
+                </a>
+            </h2>
+            {% block blog_post_detail_postedby %}
+                <span class="post-author">{% trans "Posted by" %}:
+                    {% with blog_post.user as author %}
+                        <a href="{% url "profile" author.username %}" hidefocus="true" style="outline: none;">
+                            {{ author.get_full_name|default:author.username }}
+                        </a>
+                    {% endwith %}
+                </span>
+            {% endblock %}
+            {% include 'includes/post_metainfo.html' %}
+            <div class="clearfix"></div>
+                <div class="post-desc">
+                    {% block blog_post_detail_content %}
+                        {{ blog_post.content|richtext_filters|safe }}
+                    {% endblock %}
+                </div>
+        </div>
+        <hr>
+        <!-- Comments list section -->
+        <div class="comment-list clearfix" id="comments">
+
+            {% block blog_post_detail_commentlink %}
+                <h2>
+                    {% blocktrans count comments_count=blog_post.comments_count %}
+                        {{ comments_count }} комментарий{% plural %}{{ comments_count }} комментариев
+                    {% endblocktrans %}
+                </h2>
+                <a href="#comment" class="link-add-comment anchor" hidefocus="true" style="outline: none;">
+                    Присоединиться к обсуждению
+                </a>
+            {% endblock %}
+
+            {% block blog_post_detail_rating %}
+                <div class="panel panel-default rating">
+                    <div class="panel-body">
+                        {% rating_for blog_post %}
+                    </div>
+                </div>
+            {% endblock %}
+
+            {% block blog_post_detail_sharebuttons %}
+                {% set_short_url_for blog_post %}
+                <a class="btn btn-social-icon btn-lg btn-vk" target="_blank" href="http://vk.com/share.php?url={{ blog_post.short_url|urlencode }}" onclick="_gaq.push(['_trackEvent', 'btn-social-icon', 'click', 'btn-lg']);">
+                    <i class="fa fa-vk"></i> Опубликовать вконтакте
+                </a>
+            {% endblock %}
+
+            {% block blog_post_previous_next %}
+                <ul class="pager">
+                    {% with blog_post.get_previous_by_publish_date as previous %}
+                        {% if previous %}
+                            <li class="previous">
+                                <a href="{{ previous.get_absolute_url }}">&larr; {{ previous }}</a>
+                            </li>
+                        {% endif %}
+                    {% endwith %}
+                    {% with blog_post.get_next_by_publish_date as next %}
+                        {% if next %}
+                            <li class="next">
+                                <a href="{{ next.get_absolute_url }}">{{ next }} &rarr;</a>
+                            </li>
+                        {% endif %}
+                    {% endwith %}
+                </ul>
+            {% endblock %}
+
+            <!-- Comments list -->
+            {% block blog_post_detail_comments %}
+                {% if blog_post.allow_comments %}{% comments_for blog_post %}{% endif %}
+            {% endblock %}
+        </div>
+        {% block blog_post_detail_related_posts %}
+            {% if blog_post.related_posts.all %}
+                <div id="related-posts">
+                    <div class="section-title-wr">
+                        <h3 class="section-title left">
+                            <span>{% trans 'Related posts' %}</span>
+                        </h3>
+                    </div>
+                    <div class="row">
+                        {% for post in blog_post.related_posts.all %}
+                            <div class="col-md-4">
+                                <div class="section-title-wr">
+                                    <h3 class="section-title left">
+                                        <span>
+                                            <a href="{{ post.get_absolute_url }}">{{ post.title|slice:":40" }}</a>
+                                        </span>
+                                    </h3>
+                                </div>
+                                <div class="wp-block testimonial style-1 base">
+                                    <div class="wp-block-image">
+                                        {% if settings.BLOG_USE_FEATURED_IMAGE and post.featured_image %}
+                                            <img src="{{ MEDIA_URL }}{% thumbnail post.featured_image 263 148 %}">
+                                        {% endif %}
+                                    </div>
+                                    <div class="wp-block-body">
+                                        <p>
+                                            <i class="fa fa-quote-left"></i>
+                                            <a href="{{ post.get_absolute_url }}">
+                                                {{ post.description_from_content|slice:"3:150" }}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}

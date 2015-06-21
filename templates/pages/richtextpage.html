@@ -1,0 +1,12 @@
+{% extends "pages/page.html" %}
+
+{% load mezzanine_tags %}
+
+{% block main %}
+    {{ block.super }}
+    {{ page.richtextpage.content|richtext_filters|safe }}
+{% endblock %}
+
+{% block right_panel %}
+    {% include "blog/includes/filter_panel.html" %}
+{% endblock %}

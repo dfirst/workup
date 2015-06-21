@@ -1,0 +1,46 @@
+install stack for production
+
+sudo apt-get install python-pip
+sudo pip install virtualenv
+sudo apt-get install libpq-dev python-dev
+sudo apt-get install postgresql postgresql-contrib
+sudo apt-get install git
+sudo apt-get install supervisor
+sudo apt-get install nginx
+sudo apt-get install libfreetype6-dev libjpeg8 libjpeg8-dev
+
+create virtualenv
+
+virtualenv virt
+
+pip install -r requirements.txt
+
+setup postgresql
+
+sudo su - postgres
+psql
+CREATE DATABASE workup;
+CREATE USER workup WITH PASSWORD 'P';
+GRANT ALL PRIVILEGES ON DATABASE workup TO workup;
+
+setup nginx from config
+
+sudo nano /etc/nginx/sites-available/workup
+cd /etc/nginx/sites-enabled/
+sudo ln -s ../sites-available/workup
+sudo rm default
+sudo service nginx restart
+
+setup superuser from config
+
+sudo nano /etc/supervisor/supervisord.conf
+sudo supervisorctl stop all
+sudo supervisorctl reread
+sudo supervisorctl update
+
+gallery pagination hack ---> mezzanine.pages.views.page
+    from mezzanine.utils.views import paginate
+    if slug == 'gallery':
+        extra_context['test'] = paginate(request.page.gallery.images.all(), request.GET.get("page", 1), 12, 10)
+
+googleapi fonts ---> sky-forms.css global-style.css

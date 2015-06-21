@@ -1,0 +1,39 @@
+{% extends "pages/page.html" %}
+
+{% load mezzanine_tags staticfiles %}
+
+{% block extra_css %}{% endblock extra_css %}
+
+{% block main %}
+    {{ block.super }}
+    <section class="animate-hover-slide">
+        <div class="wp-section work work-no-space g2">
+            <div class="row">
+                <div id="ulSorList" style="margin:0px 15px;">
+                    {% for image in images %}
+                        <div class="mix category_{{ image.id }} mix_all" data-cat="{{ image.id }}">
+                            <div class="wp-block inverse">
+                                <a class="hov {shiftContent:30}" rel="#image-{{ image.id }}" title="" href="#">
+                                    <img src="{{ MEDIA_URL }}{% thumbnail image.file 716 476 %}" alt="" class="img-responsive">
+                                    <div class="caption base">
+                                        <p>
+                                            {{ image.description }}
+                                        </p>
+                                        <button href="{{ image.file.url }}" class="btn btn-sm btn-white btn-icon fa-search-plus mt-10 theater"><span>Увеличить</span></button>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="gap"></div>
+                    {% pagination_for images %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block right_panel %}
+    {% include "blog/includes/filter_panel.html" %}
+{% endblock %}
+{% block extra_js %}
+{% endblock %}

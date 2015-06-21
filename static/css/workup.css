@@ -1,0 +1,18 @@
+/* Rating widget with up/down arrows */
+.rating form {display:none !important;}
+/* SLIDEBAR LIKE FAQ SETUP */
+.sb-white {
+    color: #ffffff;
+}
+.sb-background {
+    background-color: #222;
+}
+.sb-panel {
+    border: 0px;
+}
+/* Logo style */
+.logos {
+    -ms-transform: translateY(15%); /* IE 9 */
+    -webkit-transform: translateY(15%); /* Safari */
+    transform: translateY(15%);
+}
