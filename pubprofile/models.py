@@ -7,6 +7,7 @@ try:
 except ImportError:
     from urlparse import urlparse
 
+import urllib
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save, post_delete
@@ -15,6 +16,10 @@ from django.dispatch import receiver
 from mezzanine.accounts import get_profile_model
 from mezzanine.generic.models import Rating
 from mezzanine.utils.models import upload_to
+
+from social_auth.backends.contrib.vk import VKOAuth2Backend
+
+from workup.settings import MEDIA_ROOT
 
 
 class UserProfile(models.Model):
@@ -52,3 +57,16 @@ def karma(sender, **kwargs):
     if rating.user != content_object.user:
         queryset = get_profile_model().objects.filter(user=content_object.user)
         queryset.update(karma=models.F("karma") + value)
+
+
+def get_user_avatar(backend, details, response, social_user, uid,
+                    user, *args, **kwargs):
+    url = None
+    if backend.__class__ == VKOAuth2Backend:
+        url = response['photo_max_orig']
+
+    if url:
+        profile = user.userprofile
+        urllib.urlretrieve(url, MEDIA_ROOT+"/avatar/"+user.username+'.jpg')
+        profile.avatar = "avatar/"+user.username+'.jpg' # depends on where you saved it
+        profile.save()

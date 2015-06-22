@@ -43,4 +43,9 @@ gallery pagination hack ---> mezzanine.pages.views.page
     if slug == 'gallery':
         extra_context['test'] = paginate(request.page.gallery.images.all(), request.GET.get("page", 1), 12, 10)
 
+comments email required hack ---> mezzanine.generic.forms.
+    class ThreadedCommentForm(CommentForm, Html5Mixin):
+        email = forms.EmailField(label=_("Email"),
+            help_text=_("required (not published)"), required=False)
+
 googleapi fonts ---> sky-forms.css global-style.css

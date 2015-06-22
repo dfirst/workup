@@ -1,3 +1,4 @@
+from .secret import VK_API_SECRET, VK_APP_ID
 
 DEBUG = True
 
@@ -21,3 +22,9 @@ DATABASES = {
         "PORT": "",
     }
 }
+
+#social_auth
+VKONTAKTE_APP_ID = VK_APP_ID
+VKONTAKTE_APP_SECRET = VK_API_SECRET
+
+SOCIAL_AUTH_RAISE_EXCEPTIONS = DEBUG

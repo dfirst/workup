@@ -27,6 +27,9 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = smtp_mail_sender
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+#social_auth
+VKONTAKTE_APP_ID = VK_APP_ID
+VKONTAKTE_APP_SECRET = VK_API_SECRET
 
 #SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "https")
 

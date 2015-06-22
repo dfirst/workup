@@ -251,6 +251,7 @@ INSTALLED_APPS = (
     "mezzanine.accounts",
     "hitcount",
     "captcha",
+    "social_auth",
     "workup.pubprofile",
     "workup.forum",
     #"mezzanine.mobile",
@@ -368,6 +369,8 @@ except ImportError:
 else:
     set_dynamic_settings(globals())
 
+#mezzanine settings
+
 BLOG_USE_FEATURED_IMAGE = True
 
 AUTH_PROFILE_MODULE = "pubprofile.UserProfile"
@@ -395,3 +398,34 @@ HITCOUNT_KEEP_HIT_ACTIVE = { 'seconds': 120 }
 HITCOUNT_KEEP_HIT_IN_DATABASE = { 'days': 10 }
 
 ACCOUNTS_PROFILE_FORM_CLASS = 'workup.pubprofile.forms.ProfileFormCustom'
+
+#social_auth settings
+
+SOCIAL_AUTH_ENABLED_BACKENDS = ('vk',)
+
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.contrib.vk.VKOAuth2Backend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGIN_URL = "/account/"
+LOGOUT_URL = "/account/logout/"
+
+SOCIAL_AUTH_LOGIN_URL = '/login/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/error/'
+
+SOCIAL_AUTH_COMPLETE_URL_NAME = 'socialauth_complete'
+SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_auth.backends.pipeline.social.social_auth_user',
+    #'social_auth.backends.pipeline.associate.associate_by_email',
+    'social_auth.backends.pipeline.user.get_username',
+    'social_auth.backends.pipeline.user.create_user',
+    'social_auth.backends.pipeline.social.associate_user',
+    'social_auth.backends.pipeline.user.update_user_details',
+    'workup.pubprofile.models.get_user_avatar',
+)
+
+VK_EXTRA_DATA = ['photo_max_orig']

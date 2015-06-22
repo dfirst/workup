@@ -69,6 +69,7 @@ urlpatterns += patterns('',
     # ``mezzanine.urls``, go right ahead and take the parts you want
     # from it, and use them directly below instead of using
     # ``mezzanine.urls``.
+    url(r"", include('social_auth.urls')),
     url(r'^captcha/', include('captcha.urls')),
     url(r'hitcount/', include('hitcount.urls', namespace='hitcount')),
     ("^", include("workup.forum.urls")),

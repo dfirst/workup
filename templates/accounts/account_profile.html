@@ -46,7 +46,7 @@
                                                 {% with profile_user.userprofile as userprofile  %}
                                                     <dt>О себе</dt>
                                                     <dd>
-                                                        <span class="pull-left">{{ userprofile.bio|richtext_filter|safe }}</span>
+                                                        <span class="pull-left">{{ userprofile.bio }}</span>
                                                         <a href="{% url "profile_update" %}" class="btn btn-xs btn-base btn-icon fa-edit pull-right"><span>Изменить</span></a>
                                                     </dd>
                                                     <hr>
