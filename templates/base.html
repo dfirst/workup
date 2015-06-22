@@ -14,7 +14,24 @@
         {% endifinstalled %}
 
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="{% static "favicon.png" %}">
+        <link rel="apple-touch-icon" sizes="57x57" href="{% static "favicon/apple-icon-57x57.png" %}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{% static "favicon/apple-icon-60x60.png" %}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{% static "favicon/apple-icon-72x72.png" %}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{% static "favicon/apple-icon-76x76.png" %}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{% static "favicon/apple-icon-114x114.png" %}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{% static "favicon/apple-icon-120x120.png" %}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{% static "favicon/apple-icon-144x144.png" %}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{% static "favicon/apple-icon-152x152.png" %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicon/apple-icon-180x180.png" %}">
+        <link rel="icon" type="image/png" sizes="192x192"  href="{% static "favicon/android-icon-192x192.png" %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicon/favicon-32x32.png" %}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{% static "favicon/favicon-96x96.png" %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicon/favicon-16x16.png" %}">
+        <link rel="manifest" href="{% static "favicon/manifest.json" %}">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="{% static "favicon/ms-icon-144x144.png" %}">
+        <meta name="theme-color" content="#ffffff">
+
         <!-- Essential styles -->
         <link rel="stylesheet" href="{% static "assets/bootstrap/css/bootstrap.min.css" %}" type="text/css">
         <link rel="stylesheet" href="{% static "font-awesome/css/font-awesome.min.css" %}" type="text/css">
@@ -84,8 +101,8 @@
                                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                                     <i class="fa fa-bars icon-custom"></i>
                                 </button>
-                                <a class="navbar-brand text-center" href="#" title="Go 'N' Print">
-                                    <h1 class="logos">Go <span class="text-danger">'N'</span> Print</h1>
+                                <a class="navbar-brand text-center" href="{% url "home" %}" title="Твой Мир">
+                                    <h1 class="logos"><span class="text-success">Твой Мир</span></h1>
                                 </a>
                             </div>
                             <div class="navbar-collapse collapse">
@@ -192,7 +209,7 @@
                             <div class="col">
                                 <h4>О ресурсе</h4>
                                 <p class="no-margin">
-                                    Go 'N' Print — ресурс для людей которые хотят или уже связали свою жизнь с заграницей, если вы ищите: стажировки, волонтерские программы, работу заграницей или просто возможность свободно путешествовать, тогда этот ресурс для вас.
+                                    Твой Мир — ресурс для людей которые хотят или уже связали свою жизнь с заграницей, если вы ищите: стажировки, волонтерские программы, работу заграницей или просто возможность свободно путешествовать, тогда этот ресурс для вас.
                                     <br>
                                     <br>
                                 </p>
@@ -204,7 +221,7 @@
 
                     <div class="row">
                         <div class="col-lg-9 copyright">
-                            2015 © Go 'N' Print. С наилучшими пожеланиями.
+                            2015 © Твой Мир. С наилучшими пожеланиями.
                         </div>
                         <div class="col-lg-3">
                         </div>

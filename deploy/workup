@@ -20,8 +20,8 @@ server {
     location /media/ {
         alias /path/to/media/;
     }
-    location /favicon.png {
-        alias /path/to/favicon.png;
+    location /favicon.ico {
+        alias /path/to/favicon.ico;
     }
     location /robots.txt {
         alias /path/to/robots.txt;
