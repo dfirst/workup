@@ -112,7 +112,7 @@
                         {% if settings.BLOG_USE_FEATURED_IMAGE and blog_post.featured_image %}
                             {% block blog_post_list_post_featured_image %}
                                 <a href="{{ blog_post.get_absolute_url }}">
-                                    <img src="{{ MEDIA_URL }}{% thumbnail blog_post.featured_image 1280 800 %}">
+                                    <img src="{{ MEDIA_URL }}{% thumbnail blog_post.featured_image 753 471 %}">
                                 </a>
                             {% endblock %}
                         {% endif %}
