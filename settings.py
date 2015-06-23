@@ -429,3 +429,5 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 VK_EXTRA_DATA = ['photo_max_orig']
+
+VK_EXTRA_SCOPE = ['email']

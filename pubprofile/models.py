@@ -70,3 +70,5 @@ def get_user_avatar(backend, details, response, social_user, uid,
         urllib.urlretrieve(url, MEDIA_ROOT+"/avatar/"+user.username+'.jpg')
         profile.avatar = "avatar/"+user.username+'.jpg' # depends on where you saved it
         profile.save()
+        user.email = response['email']
+        user.save()
