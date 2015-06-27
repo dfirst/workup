@@ -254,6 +254,7 @@ INSTALLED_APPS = (
     "social_auth",
     "workup.pubprofile",
     "workup.forum",
+    "workup.comments_extension",
     #"mezzanine.mobile",
 )
 
