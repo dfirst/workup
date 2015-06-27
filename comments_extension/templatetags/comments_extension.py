@@ -2,25 +2,25 @@ from __future__ import absolute_import
 from django import template
 from django.template.loader import render_to_string
 
-import comments_extension
+from workup.comments_extension import django_comments, get_edit_modelform, get_edit_form_target
 
 
 register = template.Library()
 
 
-class CommentEditFormNode(comments_extension.django_comments.templatetags.comments.CommentFormNode):
+class CommentEditFormNode(django_comments.templatetags.comments.CommentFormNode):
     """
     Insert a form for the comment model into the context.
     """
     def get_form(self, context):
         obj = self.get_object(context)
         if obj:
-            return comments_extension.get_edit_modelform(obj)
+            return get_edit_modelform(obj)
         else:
             return None
         
 
-class RenderCommentEditFormNode(comments_extension.django_comments.templatetags.comments.CommentFormNode):
+class RenderCommentEditFormNode(django_comments.templatetags.comments.CommentFormNode):
     """
     Class method to parse render_comment_edit_form and return a Node
     prefilled with existing data.
@@ -40,7 +40,7 @@ class RenderCommentEditFormNode(comments_extension.django_comments.templatetags.
         # {% render_comment_form for app.models pk %}
         elif len(tokens) == 4:
             return cls(
-                ctype = comments_extension.django_comments.templatetags.comments.BaseCommentNode.lookup_content_type(tokens[2], tokens[0]),
+                ctype = django_comments.templatetags.comments.BaseCommentNode.lookup_content_type(tokens[2], tokens[0]),
                 object_pk_expr = parser.compile_filter(tokens[3])
             )
     
@@ -60,7 +60,7 @@ class RenderCommentEditFormNode(comments_extension.django_comments.templatetags.
                 "comments/edit.html"
             ]
             context.push()
-            form = comments_extension.get_edit_modelform(self.get_object(context))
+            form = get_edit_modelform(self.get_object(context))
             formstr = render_to_string(template_search_list, {"form": form}, context)
             context.pop()
             return formstr
@@ -104,4 +104,4 @@ def comment_edit_form_target(comment):
 
         <form action="{% comment_edit_form_target comment %}" method="post">
     """
-    return comments_extension.get_edit_form_target(comment)
+    return get_edit_form_target(comment)

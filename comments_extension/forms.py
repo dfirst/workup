@@ -6,7 +6,7 @@ from django.utils.translation import ungettext, ugettext, ugettext_lazy as _
 from django.forms.util import ErrorDict
 from django.utils.crypto import salted_hmac, constant_time_compare
 
-import comments_extension
+from workup.comments_extension import django_comments
 
 
 class CommentEditForm(forms.ModelForm):
@@ -24,14 +24,14 @@ class CommentEditForm(forms.ModelForm):
 
 
     comment = forms.CharField(label=_("Comment"), widget=forms.Textarea,
-                                    max_length=comments_extension.django_comments.forms.COMMENT_MAX_LENGTH)
+                                    max_length=django_comments.forms.COMMENT_MAX_LENGTH)
     
     # Security fields
     timestamp = forms.IntegerField(widget=forms.HiddenInput)
     security_hash = forms.CharField(min_length=40, max_length=40, widget=forms.HiddenInput)
     
     class Meta:
-        model = comments_extension.django_comments.models.Comment
+        model = django_comments.models.Comment
         fields = ("comment", "timestamp", "security_hash")
 
     def security_errors(self):
@@ -75,7 +75,7 @@ class CommentEditForm(forms.ModelForm):
         Generate a HMAC security hash from the provided info.
         """
         info = (content_type, object_pk, timestamp)
-        key_salt = "comments_extension.forms.CommentEditForm"
+        key_salt = "workup.comments_extension.forms.CommentEditForm"
         value = "-".join(info)
         return salted_hmac(key_salt, value).hexdigest()
         

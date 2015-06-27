@@ -9,8 +9,10 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
 from django.template.context import RequestContext
+from django.contrib.comments import Comment
+from django.views.generic import DetailView
 
-import comments_extension
+from workup.comments_extension import django_comments, get_edit_form
 
 
 class CommentEditBadRequest(HttpResponseBadRequest):
@@ -46,7 +48,7 @@ def edit(request, comment_id, next=None):
             the `comments.comment` object to be edited.
     """
     comment = get_object_or_404(
-        comments_extension.django_comments.get_model(), pk=comment_id, site__pk=settings.SITE_ID
+        django_comments.get_model(), pk=comment_id, site__pk=settings.SITE_ID
     )
     
     # Make sure user has correct permissions to change the comment,
@@ -64,7 +66,7 @@ def edit(request, comment_id, next=None):
         data["user_email"] = request.user.email
     
     next = data.get("next", next)
-    CommentEditForm = comments_extension.get_edit_form()
+    CommentEditForm = get_edit_form()
     form = CommentEditForm(data, instance=comment)
 
     if form.security_errors():
@@ -94,7 +96,7 @@ def edit(request, comment_id, next=None):
     # Otherwise, try to save the comment and emit signals
     if form.is_valid():
         MODERATOR_EDITED = "moderator edited"
-        flag, created = comments_extension.django_comments.models.CommentFlag.objects.get_or_create(
+        flag, created = django_comments.models.CommentFlag.objects.get_or_create(
             comment = form.instance,
             user = request.user,
             flag = MODERATOR_EDITED
@@ -103,7 +105,7 @@ def edit(request, comment_id, next=None):
         form.instance.is_removed = False
         form.save()
 
-        comments_extension.django_comments.signals.comment_was_flagged.send(
+        django_comments.signals.comment_was_flagged.send(
             sender = comment.__class__,
             comment = comment,
             flag = flag,
@@ -119,14 +121,12 @@ def edit(request, comment_id, next=None):
         return CommentEditBadRequest("Could not complete request!")
         
 
-edit_done = comments_extension.django_comments.views.utils.confirmation_view(
+edit_done = django_comments.views.utils.confirmation_view(
     template = "comments/edited.html",
     doc = 'Displays a "comment was edited" success page.'
 )
 
 
-from django.contrib.comments import Comment
-from django.views.generic import DetailView
 class CommentDetail(DetailView):
     model = Comment
     template_name = 'comments/edit.html'
