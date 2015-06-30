@@ -152,7 +152,7 @@
                                         <p>
                                             <i class="fa fa-quote-left"></i>
                                             <a href="{{ post.get_absolute_url }}">
-                                                {{ post.description_from_content|slice:"3:150" }}
+                                                {{ post.description_from_content|richtext_filters|safe|slice:":150" }}
                                             </a>
                                         </p>
                                     </div>
