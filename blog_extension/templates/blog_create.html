@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load jfutags %}
+{% block extra_css %}
+    {% include "jfu/upload_form_css.html" %}
+{% endblock %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block main %}
+    {% jfu %}
+    <h4>{{ blog.featured_image }}as</h4>
+    <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Create" />
+    </form>
+{% endblock %}
+{% block right_panel %}
+    {% include "blog/includes/filter_panel.html" %}
+{% endblock %}
+{% block extra_footer_js %}
+    {% include 'jfu/upload_form_js.html' %}
+{% endblock %}

@@ -1,0 +1,45 @@
+{% block CSS %}
+
+    {% block CSS_BOOTSTRAP %}
+        {% comment %}
+            Bootstrap CSS Toolkit styles
+        {% endcomment %}
+    {% endblock %}
+
+    {% block CSS_BLUEIMP_GALLERY %}
+        {% comment %}
+            Blueimp Gallery styles
+        {% endcomment %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}jfu/css/blueimp-gallery.min.css">
+    {% endblock %}
+
+    {% block CSS_JQUERY_FILE_UPLOAD %}
+        {% comment %}
+            CSS to style the file input field as button and adjust the Bootstrap progress bars
+        {% endcomment %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}jfu/css/jquery.fileupload.css">
+    {% endblock %}
+
+    {% block CSS_JQUERY_FILE_UPLOAD_UI %}
+        {% comment %}
+            CSS to style the file input field as button and adjust the Bootstrap progress bars
+        {% endcomment %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}jfu/css/jquery.fileupload-ui.css">
+        {% comment %}
+            CSS adjustments for browsers with JavaScript disabled
+        {% endcomment %}
+        <noscript>
+            <link rel="stylesheet" href="{{ STATIC_URL }}jfu/css/jquery.fileupload-ui-noscript.css">
+        </noscript>
+    {% endblock %}
+
+    {% block CSS_HTML5_SHIM %}
+        {% comment %}
+            Shim to make HTML5 elements usable in older Internet Explorer versions
+        {% endcomment %}
+    {% endblock %}
+
+    {% block CSS_EXTRA %}
+    {% endblock %}
+
+{% endblock %}
