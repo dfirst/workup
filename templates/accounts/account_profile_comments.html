@@ -15,6 +15,11 @@
                                     <div class="comment-body bb">
                                         <div class="comment-entry">
                                             <a href="{{ comment.get_absolute_url }}">{{ comment.comment }}</a>
+                                            {% if profile_user == request.user %} |
+                                                <a href="{% url "comment_edit_detail" comment.id %}">
+                                                    <b>Правка</b>
+                                                </a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </li>

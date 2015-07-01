@@ -1,34 +1,40 @@
-{% extends "comments/base.html" %}
+{% extends "base.html" %}
 {% load i18n %}
+{% block meta_title %}Правка комментария{% endblock %}
+{% block title %}Правка комментария{% endblock %}
 
-{% block title %}{% trans "Edit your comment" %}{% endblock %}
-
-{% block content %}
+{% block main %}
     {% load comments comments_extension %}
     {% get_comment_edit_form for comment as form %}
-        <form action="{% comment_edit_form_target comment %}" method="post">{% csrf_token %}
-        {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
-        {% if form.errors %}
-            <h1>{% blocktrans count counter=form.errors|length %}Please correct the error below{% plural %}Please correct the errors below{% endblocktrans %}</h1>
-        {% else %}
-            <h1>{% trans "Edit your comment" %}</h1>
-            <p><blockquote>{{ comment|linebreaks }}</blockquote></p>
+    <form class="sky-form" action="{% comment_edit_form_target comment %}" method="post">
+        {% csrf_token %}
+        {% if next %}
+            <div>
+                <input type="hidden" name="next" value="{{ next }}" />
+            </div>
         {% endif %}
+        <div class="comment-body bb">
+            <div class="comment-entry">
+                {{ comment.comment }}
+            </div>
+        </div>
         {% for field in form %}
             {% if field.is_hidden %}
                 <div>{{ field }}</div>
             {% else %}
-                {% if field.errors %}{{ field.errors }}{% endif %}
-                <p
-                    {% if field.errors %} class="error"{% endif %}
-                    {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
-                    {{ field.label_tag }} {{ field }}
-                </p>
+                <div class="form-group">
+                    <label class="label">{{ field.label }}</label>
+                    {{ field }}
+                </div>
             {% endif %}
         {% endfor %}
         <p class="submit">
-            <input type="submit" name="submit" class="submit-post" value="{% trans "Save" %}" />
-            <input type="submit" name="preview" class="submit-preview" value="{% trans "Preview" %}" />
+            <input type="submit" name="submit" class="btn btn-base btn-icon btn-send" value="{% trans "Save" %}" />
+            <input type="submit" name="preview" class="btn btn-base btn-icon btn-send" value="{% trans "Preview" %}" />
         </p>
       </form>
+{% endblock %}
+
+{% block right_panel %}
+    {% include "blog/includes/filter_panel.html" %}
 {% endblock %}

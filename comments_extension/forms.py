@@ -23,8 +23,9 @@ class CommentEditForm(forms.ModelForm):
 
 
 
-    comment = forms.CharField(label=_("Comment"), widget=forms.Textarea,
-                                    max_length=django_comments.forms.COMMENT_MAX_LENGTH)
+    comment = forms.CharField(label=_("Comment"),
+                              widget=forms.Textarea(attrs={'rows':4, 'class':'form-control'}),
+                              max_length=django_comments.forms.COMMENT_MAX_LENGTH)
     
     # Security fields
     timestamp = forms.IntegerField(widget=forms.HiddenInput)

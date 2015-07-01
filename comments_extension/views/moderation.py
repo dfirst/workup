@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.utils.html import escape
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404, render_to_response
@@ -29,8 +29,8 @@ class CommentEditBadRequest(HttpResponseBadRequest):
 
 @csrf_protect
 @require_POST
-@user_passes_test(lambda u: u.has_perm("comments.change_comment")
-                  or u.has_perm("comment.can_moderate"))
+#@user_passes_test(lambda u: u.has_perm("comments.change_comment")
+#                  or u.has_perm("comment.can_moderate"))
 def edit(request, comment_id, next=None):
     """
     Edit a comment.
@@ -53,8 +53,7 @@ def edit(request, comment_id, next=None):
     
     # Make sure user has correct permissions to change the comment,
     # or return a 401 Unauthorized error.
-    if not (request.user == comment.user and request.user.has_perm("comments.change_comment")
-            or request.user.has_perm("comments.can_moderate")):
+    if not (request.user == comment.user or request.user.has_perm("comments.can_moderate")):
         return HttpResponse("Unauthorized", status=401)
     
     # Populate POST data with all required initial data
@@ -132,4 +131,7 @@ class CommentDetail(DetailView):
     template_name = 'comments/edit.html'
     def get_context_data(self, **kwargs):
         context = super(CommentDetail, self).get_context_data(**kwargs)
-        return context
+        if not (self.request.user == context['comment'].user or self.request.user.has_perm("comments.can_moderate")):
+            raise Http404
+        else:
+            return context
