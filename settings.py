@@ -251,10 +251,12 @@ INSTALLED_APPS = (
     "mezzanine.accounts",
     "hitcount",
     "captcha",
+    "jfu",
     "social_auth",
     "workup.pubprofile",
     "workup.forum",
     "workup.comments_extension",
+    "workup.blog_extension",
     #"mezzanine.mobile",
 )
 

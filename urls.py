@@ -73,6 +73,7 @@ urlpatterns += patterns('',
     url(r'^captcha/', include('captcha.urls')),
     url(r'hitcount/', include('hitcount.urls', namespace='hitcount')),
     url(r"^comments/", include("workup.comments_extension.urls")),
+    ("^", include("workup.blog_extension.urls")),
     ("^", include("workup.forum.urls")),
     ("^", include("mezzanine.urls")),
 
