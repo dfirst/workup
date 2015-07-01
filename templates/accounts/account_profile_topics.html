@@ -10,7 +10,12 @@
                     {% for topic in object_list %}
                         <li>
                             <i class="fa fa-pencil"></i>
-                            <a href="{{ topic.get_absolute_url }}">{{ topic.title }}</a> | <a href="{% url "topic_edit" topic.id %}"><b>Правка</b></a>
+                            <a href="{{ topic.get_absolute_url }}">{{ topic.title }}</a>
+                            {% if profile_user == request.user %} |
+                                <a href="{% url "topic_edit" topic.id %}">
+                                    <b>Правка</b>
+                                </a>
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>
