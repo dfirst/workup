@@ -55,19 +55,19 @@ class BlogUpdate(UpdateView):
 
 
 @require_POST
-def upload( request ):
+def upload(request):
 
     # The assumption here is that jQuery File Upload
     # has been configured to send files one at a time.
     # If multiple files can be uploaded simulatenously,
     # 'file' may be a list of files.
 
-    file = upload_receive( request )
+    file = upload_receive(request)
 
     if 'image' not in magic.from_buffer(file.read(), mime=True) or file.size > 1024*1024*1.5:
         raise ValidationError()
 
-    instance = BlogImage( image = file )
+    instance = BlogImage(image = file, user=request.user)
     instance.save()
 
     basename = instance.image.name

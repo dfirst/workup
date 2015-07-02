@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import BlogImage
 
-
-admin.site.register(BlogImage)
+class BlogImageAdmin(admin.ModelAdmin):
+    list_display = ('image', 'user', 'admin_thumb')
+admin.site.register(BlogImage, BlogImageAdmin)
