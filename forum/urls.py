@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 
-from workup.forum.views import TopicList, TopicCreate, TopicDetail, CommentList, TagList, TopicUpdate
+from workup.forum.views import TopicList, TopicCreate, TopicDetail, CommentList, TagList, TopicUpdate, BlogPostList
 
 
 urlpatterns = patterns("",
@@ -43,4 +43,6 @@ urlpatterns = patterns("",
     url("^tags/$",
         TagList.as_view(),
         name="tag_list"),
+    url("^users/(?P<username>.*)/blogs/$",
+        BlogPostList.as_view(template_name='accounts/account_profile_blogs.html'), name="blog_list_user"),
 )

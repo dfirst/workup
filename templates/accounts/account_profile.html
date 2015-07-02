@@ -30,11 +30,13 @@
                         <div class="tabs-framed">
                             <ul class="tabs clearfix">
                                 {% url "profile" profile_user as user_profile_url %}
-                                <li {% if request.path == user_profile_url %}class="active"{% endif %}><a href="{% url "profile" profile_user.username %}">Персональная информация</a></li>
+                                <li {% if request.path == user_profile_url %}class="active"{% endif %}><a href="{% url "profile" profile_user.username %}">О себе</a></li>
+                                {% url "blog_list_user" profile_user as user_blog_url %}
+                                <li {% if request.path == user_blog_url %}class="active"{% endif %}><a href="{% url "blog_list_user" profile_user %}">Блоги</a></li>
                                 {% url "topic_list_user" profile_user as user_topics_url %}
-                                <li {% if request.path == user_topics_url %}class="active"{% endif %}><a href="{% url "topic_list_user" profile_user %}">Темы пользователя</a></li>
+                                <li {% if request.path == user_topics_url %}class="active"{% endif %}><a href="{% url "topic_list_user" profile_user %}">Темы</a></li>
                                 {% url "comment_list_user" profile_user as user_comments_url %}
-                                <li {% if request.path == user_comments_url %}class="active"{% endif %}><a href="{% url "comment_list_user" profile_user %}">Комментарии пользователя</a></li>
+                                <li {% if request.path == user_comments_url %}class="active"{% endif %}><a href="{% url "comment_list_user" profile_user %}">Комментарии</a></li>
                             </ul>
                             {% block profile_content %}
                                 <div class="tab-content">

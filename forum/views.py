@@ -17,6 +17,7 @@ from mezzanine.conf import settings
 from mezzanine.generic.models import ThreadedComment, Keyword
 from mezzanine.utils.views import paginate
 from mezzanine.blog.models import BlogCategory
+from mezzanine.blog.models import BlogPost
 
 from workup.forum.forms import TopicForm
 from workup.forum.models import Topic
@@ -225,3 +226,27 @@ class CommentList(ScoreOrderingView):
 
 class TagList(TemplateView):
     template_name = "topics/tag_list.html"
+
+
+class BlogPostView(object):
+    """
+    List and detail view mixin for blogs - just defines the correct
+    queryset.
+    """
+    def get_queryset(self):
+        return BlogPost.objects.published().select_related(
+            "user",
+            "user__%s" % USER_PROFILE_RELATED_NAME
+        )
+
+
+class BlogPostList(BlogPostView, UserFilterView):
+    """
+    List view for blogs, which can be for a single user
+    profile page).
+    """
+    def get_context_data(self, **kwargs):
+        context = super(BlogPostList, self).get_context_data(**kwargs)
+        context["object_list"] = paginate(context["object_list"], self.request.GET.get("page", 1),
+            settings.ITEMS_PER_PAGE, settings.MAX_PAGING_LINKS)
+        return context
