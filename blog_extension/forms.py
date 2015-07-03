@@ -3,7 +3,7 @@ from django.forms.models import modelform_factory
 from mezzanine.blog.models import BlogPost
 
 
-BaseBlogForm = modelform_factory(BlogPost, fields=["title", "content", "status", "gen_description", "allow_comments", "categories", "featured_image"])
+BaseBlogForm = modelform_factory(BlogPost, fields=["title", "featured_image", "content", "status", "categories"])
 
 
 class CreateBlogForm(BaseBlogForm):

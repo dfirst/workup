@@ -13,6 +13,6 @@ urlpatterns = patterns("",
     url("^blog/edit/(?P<id>.*)/$",
         login_required(BlogUpdate.as_view()),
         name="blog_edit"),
-    url( r'upload/', upload, name = 'jfu_upload' ),
-    url( '^delete/(?P<pk>\d+)$', upload_delete, name = 'jfu_delete' ),
+    url('^blog/upload/', upload, name = 'jfu_upload'),
+    url('^blog/delete/(?P<pk>\d+)$', upload_delete, name = 'jfu_delete'),
 )

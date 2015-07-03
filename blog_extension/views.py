@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.views.generic import CreateView, UpdateView
 from django.views.decorators.http import require_POST
 from django.core.exceptions import ValidationError
+from django.contrib.auth.decorators import login_required
 
 from mezzanine.blog.models import BlogPost
 from jfu.http import upload_receive, UploadResponse, JFUResponse
@@ -17,43 +18,46 @@ from .forms import CreateBlogForm
 from .models import BlogImage
 
 
-class BlogCreate(CreateView):
+class BlogActView(object):
     model = BlogPost
     exclude = ('user',)
     form_class = CreateBlogForm
     template_name = 'blog_create.html'
     def get_context_data(self, **kwargs):
-        context = super(BlogCreate, self).get_context_data(**kwargs)
-        context['title'] = 'Test'
+        context = super(BlogActView, self).get_context_data(**kwargs)
+        context['title'] = 'Создание/Редактирование записи'
+        context['images'] = BlogImage.objects.filter(user=self.request.user)
         return context
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.featured_image = self.request.POST.get('featured_image', False)
         obj.user = self.request.user
-        print self.request.FILES
         obj.save()
+        if obj.status == 1:
+            return HttpResponseRedirect(reverse('blog_list_user', kwargs={'username': self.request.user}))
+        elif obj.status == 2:
+            return HttpResponseRedirect(self.get_success_url())
 
-        return HttpResponseRedirect('/')
+
+class BlogCreate(BlogActView, CreateView):
+    pass
 
 
-class BlogUpdate(UpdateView):
+class BlogUpdate(BlogActView, UpdateView):
     """
     Topic creation view - assigns the user to the new topic, as well
     as setting Mezzanine's ``gen_description`` attribute to ``False``,
     so that we can provide our own descriptions.
     """
-    model = BlogPost
-    exclude = ('user',)
-    form_class = CreateBlogForm
-    template_name = 'blog_create.html'
     def get_object(self, queryset=None):
-        topic = BlogPost.objects.get(id=self.kwargs['id'])
-        if topic.is_editable(self.request):
-            return topic
+        blog_object = BlogPost.objects.get(id=self.kwargs['id'])
+        if blog_object.is_editable(self.request):
+            return blog_object
         else:
             raise Http404()
 
 
+@login_required
 @require_POST
 def upload(request):
 
@@ -85,12 +89,17 @@ def upload(request):
     return UploadResponse( request, file_dict )
 
 
+@login_required
 @require_POST
 def upload_delete( request, pk ):
     success = True
     try:
         instance = BlogImage.objects.get( pk = pk )
-        instance.delete()
+        if instance.is_editable(request):
+            return instance.delete()
+        else:
+            raise Http404()
+        return instance.delete()
     except BlogImage.DoesNotExist:
         success = False
 
