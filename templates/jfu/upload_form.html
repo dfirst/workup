@@ -212,7 +212,7 @@
                                     <a href="{{ JQ_OPEN }}=file.url{{ JQ_CLOSE }}"
                                      title="{{ JQ_OPEN }}=file.name{{ JQ_CLOSE }}"
                                      download="{{ JQ_OPEN }}=file.name{{ JQ_CLOSE }}"
-                                     data-gallery><img src="{{ JQ_OPEN }}=file.thumbnailUrl{{ JQ_CLOSE }}"
+                                     data-gallery><img src="{{ JQ_OPEN }}=file.thumbnailUrl{{ JQ_CLOSE }}" width="300px"
                                     ></a>
                                 {{ JQ_OPEN }} } {{ JQ_CLOSE }}
                             </span>
@@ -223,12 +223,10 @@
                         <td>
                             <p class="name">
                                 {{ JQ_OPEN }} if (file.url) { {{ JQ_CLOSE }}
-                                    <a href="{{ JQ_OPEN }}=file.url{{ JQ_CLOSE }}"
-                                     title="{{ JQ_OPEN }}=file.name{{ JQ_CLOSE }}"
-                                     download="{{ JQ_OPEN }}=file.name{{ JQ_CLOSE }}"
-                                     {{ JQ_OPEN }}=file.thumbnailUrl?'data-gallery':''{{ JQ_CLOSE }}>
-                                     {{ JQ_OPEN }}=file.name{{ JQ_CLOSE }}
-                                    </a>
+                                    <span>
+                                        <b>Вставьте эту ссылку там, где хотите видеть свою картинку:</b>
+                                        {{ JQ_OPEN }}=file.name{{ JQ_CLOSE }}
+                                    </span>
                                 {{ JQ_OPEN }} } else { {{ JQ_CLOSE }}
                                     <span>{{ JQ_OPEN }}=file.name{{ JQ_CLOSE }}</span>
                                 {{ JQ_OPEN }} } {{ JQ_CLOSE }}
