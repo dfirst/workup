@@ -234,7 +234,7 @@ class BlogPostView(object):
     queryset.
     """
     def get_queryset(self):
-        return BlogPost.objects.published().select_related(
+        return BlogPost.objects.select_related(
             "user",
             "user__%s" % USER_PROFILE_RELATED_NAME
         )
@@ -247,6 +247,7 @@ class BlogPostList(BlogPostView, UserFilterView):
     """
     def get_context_data(self, **kwargs):
         context = super(BlogPostList, self).get_context_data(**kwargs)
-        context["object_list"] = paginate(context["object_list"], self.request.GET.get("page", 1),
+        context["drafts"] = context["object_list"].filter(status=1)
+        context["object_list"] = paginate(context["object_list"].filter(status=2), self.request.GET.get("page", 1),
             settings.ITEMS_PER_PAGE, settings.MAX_PAGING_LINKS)
         return context

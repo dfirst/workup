@@ -7,12 +7,26 @@
                 <h3 class="title title-lg">{{ profile_user.get_full_name }}</h3>
                 <p class="mb-20">Темы пользователя {{ profile_user.get_full_name }}</p>
                 <ul class="list-check">
-                    {% for topic in object_list %}
+                    {% if profile_user == request.user %}
+                        {% if drafts %}
+                            {% for blog in drafts %}
+                                <li>
+                                    <i class="fa fa-pencil"></i>
+                                    {{ blog.title }} (Черновик) |
+                                    <a href="{% url "blog_edit" blog.id %}">
+                                        <b>Правка</b>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            <hr />
+                        {% endif %}
+                    {% endif %}
+                    {% for blog in object_list %}
                         <li>
                             <i class="fa fa-pencil"></i>
-                            <a href="{{ topic.get_absolute_url }}">{{ topic.title }}</a>
+                            <a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a>
                             {% if profile_user == request.user %} |
-                                <a href="{% url "topic_edit" topic.id %}">
+                                <a href="{% url "blog_edit" blog.id %}">
                                     <b>Правка</b>
                                 </a>
                             {% endif %}
