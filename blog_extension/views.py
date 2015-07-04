@@ -30,7 +30,7 @@ class BlogActView(object):
         return context
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.featured_image = self.request.POST.get('featured_image', False)
+        obj.featured_image = self.request.POST.get('featured_image', False).replace('/static/media/', '')
         obj.user = self.request.user
         obj.save()
         if obj.status == 1:

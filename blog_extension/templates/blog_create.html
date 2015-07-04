@@ -1,19 +1,138 @@
 {% extends "base.html" %}
-{% load staticfiles %}
-{% load jfutags %}
+{% load staticfiles jfutags i18n mezzanine_tags %}
 {% block extra_css %}
     {% include "jfu/upload_form_css.html" %}
+{% endblock %}
+{% block extra_js %}
+    <script src="//cdn.ckeditor.com/4.4.7/standard/ckeditor.js" xmlns="http://www.w3.org/1999/html"></script>
 {% endblock %}
 {% block title %}
     {{ title }}
 {% endblock %}
 {% block main %}
+    <div class="post-item">
+        <div class="post-meta-top">
+            <div class="post-image">
+                <a href="{{ MEDIA_URL }}{{ form.featured_image.value }}" class="theater" title="Shoreline">
+                    <img src="{{ MEDIA_URL }}{{ form.featured_image.value }}" alt="" id="post-image">
+                </a>
+            </div>
+        </div>
+        <div class="post-content">
+            <h2 class="post-title" id="post-title">
+                {{ form.title.value }}
+            </h2>
+            <span class="post-author">{% trans "Posted by" %}:
+                <a href="#" hidefocus="true" style="outline: none;">
+                    {{ user.username }}
+                </a>
+            </span>
+            <div class="post-desc" id="post-desc">
+                {{ form.content.value|richtext_filters|safe }}
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="wp-block default user-form">
+        <div class="form-header">
+            <h2>Форма создание новой записи</h2>
+        </div>
+        <div class="form-body">
+            <form action="" class="sky-form" method="post" enctype="multipart/form-data">{% csrf_token %}
+                <fieldset class="no-padding">
+                    <section>
+                        {% for field in form %}
+                            {% if field.is_hidden %}
+                                <div>{{ field }}</div>
+                            {% else %}
+                                <div class="form-group {% if field.errors %} has-error{% endif %}">
+                                    <label class="label">{{ field.label_tag }}</label>
+                                    <label class="input">
+                                        {{ field }}
+                                    </label>
+                                    {% if field.errors %}
+                                        <p class="help-block">
+                                            {% for e in field.errors %}
+                                                {% if not forloop.first %} / {% endif %}{{ e }}
+                                            {% endfor %}
+                                        </p>
+                                    {% elif field.help_text %}
+                                        <p class="help-block">{{ field.help_text }}</p>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </section>
+                    <section>
+                        <button class="btn btn-base btn-icon btn-icon-right btn-icon-go pull-right" type="submit">
+                            <span>Сохранить</span>
+                        </button>
+                    </section>
+                </fieldset>
+            </form>
+        </div>
+        <div class="form-footer">
+            <p></p>
+        </div>
+    </div>
+    <script>
+        CKEDITOR.replace( 'id_content', {language: 'ru'} );
+        var editor = CKEDITOR.instances.id_content; //reference to instance
+        // on `key` event
+        editor.on('key', function(){
+            var data = editor.getData(); //reference to ckeditor data
+            $('#post-desc').html(data); //update `div` html
+        });
+        var wptitle = document.getElementById('id_title');
+        wptitle.onkeyup = wptitle.onkeypress = function(){
+            document.getElementById('post-title').innerHTML = this.value;
+        };
+        var wpimage = document.getElementById('id_featured_image');
+        wpimage.onkeyup = wpimage.onkeypress = function(){
+            document.getElementById('post-image').src = this.value;
+        };
+        var fimage = document.getElementById("id_featured_image");
+        if (fimage.value.length > 0 && fimage.value.indexOf('/static/media/') === -1) {
+            fimage.value = "/static/media/"+fimage.value;};
+    </script>
+    <div class="wp-block default user-form">
+        <div class="form-header">
+            <h2>Интерфейс работы с изображениями</h2>
+        </div>
+    </div>
     {% jfu %}
-    <h4>{{ blog.featured_image }}as</h4>
-    <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Create" />
-    </form>
+    <table class="table table-striped" role="presentation">
+        <thead>
+            <th>
+                <td><b>Ранее загруженные изображения</b></td>
+            </th>
+        </thead>
+        <tbody class="files">
+            {% for image in images %}
+                <tr class="template-download">
+                    <td>
+                        <span class="preview">
+                            <img src={{ MEDIA_URL }}{{ image.image }} width=300>
+                        </span>
+                    </td>
+                    <td>
+                        <p class="name">
+                            <b>Вставьте эту ссылку там где хотите видеть свою картинку:</b>
+                            <br/>
+                            <span class="text-info">
+                                {{ image.image.url }}
+                            </span>
+                        </p>
+                    </td>
+                    <td>
+                        <form action="{% url "jfu_delete" image.id %}" method="post">{% csrf_token %}
+                            <input type="submit" name="delete" class="btn btn-danger delete" value="Удалить">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 {% block right_panel %}
     {% include "blog/includes/filter_panel.html" %}

@@ -18,7 +18,7 @@
                     The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload
                 {% endcomment %}
 
-                <div class="col-md-9">
+                <div class="col-md-12">
 
                     {% comment %}
                      The fileinput-button span is used to style the file input field as button
@@ -27,7 +27,7 @@
                     {% block UPLOAD_FORM_BUTTON_BAR_ADD %}
                         <span class="btn btn-success fileinput-button">
                             <i class="glyphicon glyphicon-plus"></i>
-                            <span>Add files...</span>
+                            <span>Загрузить изображение</span>
 
                             {% block UPLOAD_FORM_BUTTON_BAR_ADD_FILE_INPUT %}
                                 {% comment %}
@@ -56,15 +56,15 @@
                     {% block UPLOAD_FORM_BUTTON_BAR_CONTROL %}
                         <button type="submit" class="btn btn-primary start">
                             <i class="glyphicon glyphicon-upload"></i>
-                            <span>Start upload</span>
+                            <span>Начать загрузку</span>
                         </button>
                         <button type="reset" class="btn btn-warning cancel">
                             <i class="glyphicon glyphicon-ban-circle"></i>
-                            <span>Cancel upload</span>
+                            <span>Отменить загрузку</span>
                         </button>
                         <button type="button" class="btn btn-danger delete">
                             <i class="glyphicon glyphicon-trash"></i>
-                            <span>Delete</span>
+                            <span>Удалить</span>
                         </button>
                         <input type="checkbox" class="toggle">
                     {% endblock %}
@@ -174,7 +174,7 @@
                                 {{ JQ_OPEN }} if (!i && !o.options.autoUpload) { {{ JQ_CLOSE }}
                                     <button class="btn btn-primary start" disabled>
                                         <i class="glyphicon glyphicon-upload"></i>
-                                        <span>Start</span>
+                                        <span>Начать</span>
                                     </button>
                                 {{ JQ_OPEN }} } {{ JQ_CLOSE }}
                             {% endblock %}
@@ -183,7 +183,7 @@
                                 {{ JQ_OPEN }} if (!i) { {{ JQ_CLOSE }}
                                     <button class="btn btn-warning cancel">
                                         <i class="glyphicon glyphicon-ban-circle"></i>
-                                        <span>Cancel</span>
+                                        <span>Отмена</span>
                                     </button>
                                 {{ JQ_OPEN }} } {{ JQ_CLOSE }}
                             {% endblock %}
@@ -225,7 +225,7 @@
                                 {{ JQ_OPEN }} if (file.url) { {{ JQ_CLOSE }}
                                     <span>
                                         <b>Вставьте эту ссылку там, где хотите видеть свою картинку:</b>
-                                        {{ JQ_OPEN }}=file.name{{ JQ_CLOSE }}
+                                        <span class="text-info">{{ JQ_OPEN }}=file.thumbnailUrl{{ JQ_CLOSE }}</span>
                                     </span>
                                 {{ JQ_OPEN }} } else { {{ JQ_CLOSE }}
                                     <span>{{ JQ_OPEN }}=file.name{{ JQ_CLOSE }}</span>
@@ -257,13 +257,13 @@
                                             data-xhr-fields='{"withCredentials":true}'{% }
                                         {{ JQ_CLOSE }}>
                                     <i class="glyphicon glyphicon-trash"></i>
-                                    <span>Delete</span>
+                                    <span>Удалить</span>
                                 </button>
                                 <input type="checkbox" name="delete" value="1" class="toggle">
                             {{ JQ_OPEN }} } else { {{ JQ_CLOSE }}
                                 <button class="btn btn-warning cancel">
                                     <i class="glyphicon glyphicon-ban-circle"></i>
-                                    <span>Cancel</span>
+                                    <span>Отменить</span>
                                 </button>
                             {{ JQ_OPEN }} } {{ JQ_CLOSE }}
                         </td>
