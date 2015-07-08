@@ -18,6 +18,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('image', models.ImageField(upload_to=b'uploads/blog')),
+                ('status', models.IntegerField()),
                 ('user', models.ForeignKey(related_name='blogimages', verbose_name='Author', to=settings.AUTH_USER_MODEL)),
             ],
             options={

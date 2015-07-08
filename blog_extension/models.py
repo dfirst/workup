@@ -5,4 +5,5 @@ from mezzanine.utils.models import AdminThumbMixin
 
 class BlogImage(Ownable, AdminThumbMixin):
     image = models.ImageField(upload_to=upload_to("blog.BlogPost.featured_image", "uploads/blog"))
+    status = models.IntegerField()
     admin_thumb_field = "image"

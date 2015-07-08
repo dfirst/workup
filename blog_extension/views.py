@@ -72,6 +72,7 @@ def upload(request):
         raise ValidationError()
 
     instance = BlogImage(image = file, user=request.user)
+    instance.status = 2
     instance.save()
 
     basename = instance.image.name
@@ -96,7 +97,8 @@ def upload_delete( request, pk ):
     try:
         instance = BlogImage.objects.get( pk = pk )
         if instance.is_editable(request):
-            return instance.delete()
+            instance.status=1
+            instance.save()
         else:
             raise Http404()
         return instance.delete()
