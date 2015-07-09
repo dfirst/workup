@@ -28,7 +28,7 @@
                         </h6>
                         <!-- p comes from db -->
                         <a href="{{ recent_post.get_absolute_url }}">
-                            {{ recent_post.description_from_content|richtext_filters|safe|slice:"3:140" }}
+                            {{ recent_post.description|slice:"140" }}
                         </a>
                     </div>
                 {% endspaceless %}

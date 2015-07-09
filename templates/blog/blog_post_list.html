@@ -139,7 +139,7 @@
                     <div class="post-desc">
                         {% block blog_post_list_post_content %}
                             <!-- p comes from db -->
-                            {{ blog_post.description_from_content|richtext_filters|safe }}
+                            {{ blog_post.description }}
                         {% endblock %}
                     </div>
                 </div>

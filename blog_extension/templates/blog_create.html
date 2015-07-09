@@ -23,7 +23,9 @@
         </div>
         <div class="post-content">
             <h2 class="post-title" id="post-title">
-                {{ form.title.value }}
+                {% if form.title.value %}
+                    {{ form.title.value }}
+                {% endif %}
             </h2>
             <span class="post-author">{% trans "Posted by" %}:
                 <a href="#" hidefocus="true" style="outline: none;">
@@ -31,7 +33,9 @@
                 </a>
             </span>
             <div class="post-desc" id="post-desc">
-                {{ form.content.value|richtext_filters|safe }}
+                {% if form.content.value %}
+                    {{ form.content.value|richtext_filters|safe }}
+                {% endif %}
             </div>
         </div>
     </div>
@@ -176,4 +180,20 @@
 {% endblock %}
 {% block extra_footer_js %}
     {% include 'jfu/upload_form_js.html' %}
+    <script>
+        $( function() {
+            'use strict';
+            var formData = $('#fileupload').serializeArray();
+            formData.push(
+                    { name: "csrfmiddlewaretoken", value: "{{ csrf_token }}" }
+            );
+            jQuery('#fileupload').fileupload({
+                formData: formData,
+                sequentialUploads: true,
+                disableImageResize: false,
+                imageMaxWidth: 848,
+                imageMaxHeight: 636
+            });
+        });
+    </script>
 {% endblock %}
