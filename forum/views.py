@@ -126,7 +126,7 @@ class TopicList(TopicView, ScoreOrderingView):
         if tag:
             return get_object_or_404(Keyword, slug=tag).title
         if context["by_score"]:
-            return "Форум"  # Homepage
+            return "Форум/Рейтинг"  # Homepage
         if category:
             return get_object_or_404(BlogCategory, slug=category).title
         if context["profile_user"]:
@@ -135,7 +135,7 @@ class TopicList(TopicView, ScoreOrderingView):
                 USER_PROFILE_RELATED_NAME
             )
         else:
-            return "Новые"
+            return "Форум/Новые темы"
 
 
 class TopicUpdate(UpdateView):
