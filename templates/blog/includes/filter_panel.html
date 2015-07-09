@@ -4,6 +4,15 @@
     {% include "includes/user_panel.html" %}
 {% endnevercache %}
 
+{% nevercache %}
+    <div class="panel panel-default user-panel">
+        <div class="panel-body">
+            <a href="{% url "blog_create" %}" class="btn btn-default btn-sm btn-account">
+                <span class="glyphicon glyphicon-pencil"></span> Написать статью
+            </a>
+        </div>
+    </div>
+{% endnevercache %}
 
 {% block blog_recent_posts %}
     {% blog_recent_posts 30 as recent_posts %}
