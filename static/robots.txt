@@ -1,9 +1,11 @@
 User-agent: *
 Disallow: /admin/
 Disallow: /accounts/
+Disallow: /account/
 Disallow: /blog/category/
 Disallow: /blog/tag/
 Disallow: /blog/author/
+Disallow: /blog/create
 Disallow: /forum/category/
 Disallow: /forum/tags/
-Disallow: /forum/best/
+Disallow: /forum/best
