@@ -16,21 +16,21 @@ class CommentEditForm(forms.ModelForm):
     """
     def __init__(self, *args, **kwargs):
         super(CommentEditForm, self).__init__(*args, **kwargs)
-        
+
         # initiate the form with security data
         self.initial.update(self.generate_security_data())
-        
 
+    comment = forms.CharField(
+        label=_("Comment"),
+        widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+        max_length=django_comments.forms.COMMENT_MAX_LENGTH)
 
-
-    comment = forms.CharField(label=_("Comment"),
-                              widget=forms.Textarea(attrs={'rows':4, 'class':'form-control'}),
-                              max_length=django_comments.forms.COMMENT_MAX_LENGTH)
-    
     # Security fields
     timestamp = forms.IntegerField(widget=forms.HiddenInput)
-    security_hash = forms.CharField(min_length=40, max_length=40, widget=forms.HiddenInput)
-    
+    security_hash = forms.CharField(
+        min_length=40, max_length=40, widget=forms.HiddenInput
+    )
+
     class Meta:
         model = django_comments.models.Comment
         fields = ("comment", "timestamp", "security_hash")
@@ -44,13 +44,15 @@ class CommentEditForm(forms.ModelForm):
             if f in self.errors:
                 errors[f] = self.errors[f]
         return errors
-    
+
     def generate_security_data(self):
         """
         Generate initial security data
         """
         # Use the original timestamp
-        timestamp = str(int(time.mktime(self.instance.submit_date.timetuple())))
+        timestamp = str(
+            int(time.mktime(self.instance.submit_date.timetuple()))
+        )
         security_dict = {
             "content_type": str(self.instance.content_type.pk),
             "object_pk": str(self.instance.pk),
@@ -58,7 +60,7 @@ class CommentEditForm(forms.ModelForm):
             "security_hash": self.initial_security_hash(timestamp)
         }
         return security_dict
-    
+
     def initial_security_hash(self, timestamp):
         """
         Generate the initial security hash from self.content_object
@@ -70,7 +72,7 @@ class CommentEditForm(forms.ModelForm):
             "timestamp": timestamp
         }
         return self.generate_security_hash(**initial_security_dict)
-    
+
     def generate_security_hash(self, content_type, object_pk, timestamp):
         """
         Generate a HMAC security hash from the provided info.
@@ -79,7 +81,7 @@ class CommentEditForm(forms.ModelForm):
         key_salt = "workup.comments_extension.forms.CommentEditForm"
         value = "-".join(info)
         return salted_hmac(key_salt, value).hexdigest()
-        
+
     #
     # Clean methods
     #
@@ -87,7 +89,9 @@ class CommentEditForm(forms.ModelForm):
         """
         Make sure the security hash match
         """
-        timestamp = str(int(time.mktime(self.instance.submit_date.timetuple())))
+        timestamp = str(
+            int(time.mktime(self.instance.submit_date.timetuple()))
+        )
         security_hash_dict = {
             "content_type": self.data.get("content_type", str(self.instance.content_type.pk)),
             "object_pk": self.data.get("object_pk", str(self.instance.pk)),
@@ -98,15 +102,17 @@ class CommentEditForm(forms.ModelForm):
         if not constant_time_compare(expected_hash, actual_hash):
             raise forms.ValidationError("Security hash check failed.")
         return actual_hash
-    
+
     def clean_comment(self):
         """
         If COMMENTS_ALLOW_PROFANITIES is False, check that the comment doesn't
         contain anything in PROFANITIES_LIST.
         """
         comment = self.cleaned_data["comment"]
-        if settings.COMMENTS_ALLOW_PROFANITIES == False:
-            bad_words = [w for w in settings.PROFANITIES_LIST if w in comment.lower()]
+        if settings.COMMENTS_ALLOW_PROFANITIES is False:
+            bad_words = [
+                w for w in settings.PROFANITIES_LIST if w in comment.lower()
+            ]
             if bad_words:
                 raise forms.ValidationError(ungettext(
                     "Watch your mouth! The word %s is not allowed here.",

@@ -7,9 +7,11 @@ from workup.pubprofile.views import USER_PROFILE_RELATED_NAME
 
 register = template.Library()
 
+
 @register.filter
 def getvalue(mapping, key):
-  return mapping.get(key, '')
+    return mapping.get(key, '')
+
 
 @register.filter
 def get_profile(user):

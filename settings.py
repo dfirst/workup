@@ -150,7 +150,7 @@ AUTHENTICATION_BACKENDS = ("mezzanine.core.auth_backends.MezzanineBackend",)
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+#   "django.contrib.staticfiles.finders.DefaultStorageFinder",
 )
 
 # The numeric mode to set newly-uploaded files to. The value should be
@@ -257,7 +257,7 @@ INSTALLED_APPS = (
     "workup.forum",
     "workup.comments_extension",
     "workup.blog_extension",
-    #"mezzanine.mobile",
+    # "mezzanine.mobile",
 )
 
 # List of processors used by RequestContext to populate the context.
@@ -372,7 +372,7 @@ except ImportError:
 else:
     set_dynamic_settings(globals())
 
-#mezzanine settings
+# mezzanine settings
 
 BLOG_USE_FEATURED_IMAGE = True
 
@@ -396,13 +396,13 @@ SEARCH_MODEL_CHOICES = ('pages.Page', 'blog.BlogPost', 'forum.Topic')
 
 SESSION_SAVE_EVERY_REQUEST = True
 
-HITCOUNT_KEEP_HIT_ACTIVE = { 'seconds': 120 }
+HITCOUNT_KEEP_HIT_ACTIVE = {'seconds': 120}
 
-HITCOUNT_KEEP_HIT_IN_DATABASE = { 'days': 10 }
+HITCOUNT_KEEP_HIT_IN_DATABASE = {'days': 10}
 
 ACCOUNTS_PROFILE_FORM_CLASS = 'workup.pubprofile.forms.ProfileFormCustom'
 
-#social_auth settings
+# social_auth settings
 
 SOCIAL_AUTH_ENABLED_BACKENDS = ('vk',)
 
@@ -423,7 +423,7 @@ SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
 
 SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
-    #'social_auth.backends.pipeline.associate.associate_by_email',
+    # 'social_auth.backends.pipeline.associate.associate_by_email',
     'social_auth.backends.pipeline.user.get_username',
     'social_auth.backends.pipeline.user.create_user',
     'social_auth.backends.pipeline.social.associate_user',

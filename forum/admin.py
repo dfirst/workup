@@ -20,7 +20,8 @@ class TopicAdmin(DisplayableAdmin):
 
     fieldsets = (
         (None, {
-            "fields": ("title", "status", "publish_date", "user", "description", "categories", "content"),
+            "fields": ("title", "status", "publish_date", "user",
+                       "description", "categories", "content"),
         }),
     )
 

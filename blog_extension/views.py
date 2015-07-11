@@ -23,18 +23,24 @@ class BlogActView(object):
     exclude = ('user',)
     form_class = CreateBlogForm
     template_name = 'blog_create.html'
+
     def get_context_data(self, **kwargs):
         context = super(BlogActView, self).get_context_data(**kwargs)
         context['title'] = 'Создание/Редактирование записи'
         context['images'] = BlogImage.objects.filter(user=self.request.user)
         return context
+
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.featured_image = self.request.POST.get('featured_image', False).replace('/static/media/', '').strip()
         obj.user = self.request.user
         obj.save()
         if obj.status == 1:
-            return HttpResponseRedirect(reverse('blog_list_user', kwargs={'username': self.request.user}))
+            return HttpResponseRedirect(
+                reverse(
+                    'blog_list_user', kwargs={'username': self.request.user}
+                )
+            )
         elif obj.status == 2:
             return HttpResponseRedirect(reverse('blog_post_detail', kwargs={'slug': obj.slug}))
 
@@ -71,33 +77,33 @@ def upload(request):
     if 'image' not in magic.from_buffer(file.read(), mime=True) or file.size > 1024*1024*1.5:
         raise ValidationError()
 
-    instance = BlogImage(image = file, user=request.user)
+    instance = BlogImage(image=file, user=request.user)
     instance.status = 2
     instance.save()
 
     basename = instance.image.name
 
     file_dict = {
-        'name' : basename,
-        'size' : file.size,
+        'name': basename,
+        'size': file.size,
 
         'url': settings.MEDIA_URL + basename,
         'thumbnailUrl': settings.MEDIA_URL + basename,
 
-        'deleteUrl': reverse('jfu_delete', kwargs = { 'pk': instance.pk }),
+        'deleteUrl': reverse('jfu_delete', kwargs={'pk': instance.pk}),
         'deleteType': 'POST',
     }
-    return UploadResponse( request, file_dict )
+    return UploadResponse(request, file_dict)
 
 
 @login_required
 @require_POST
-def upload_delete( request, pk ):
+def upload_delete(request, pk):
     success = True
     try:
-        instance = BlogImage.objects.get( pk = pk )
+        instance = BlogImage.objects.get(pk=pk)
         if instance.is_editable(request):
-            instance.status=1
+            instance.status = 1
             instance.save()
         else:
             raise Http404()
@@ -105,4 +111,4 @@ def upload_delete( request, pk ):
     except BlogImage.DoesNotExist:
         success = False
 
-    return JFUResponse( request, success )
+    return JFUResponse(request, success)

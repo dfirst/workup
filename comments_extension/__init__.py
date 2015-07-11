@@ -23,8 +23,8 @@ def get_edit_form():
         return django_comments.get_comment_app().get_edit_form()
     else:
         return CommentEditForm
-    
-    
+
+
 def get_edit_modelform(comment):
     """
     Returns the comment ModelForm instance

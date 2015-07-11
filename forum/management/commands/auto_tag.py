@@ -15,10 +15,10 @@ class Command(BaseCommand):
 
     option_list = BaseCommand.option_list + (
         make_option("--generate", dest="generate", type=int),
-        make_option("--remove", dest="remove", action="store_true",
-            default=False),
-        make_option("--assign", dest="assign", action="store_true",
-            default=False),
+        make_option("--remove", dest="remove",
+                    action="store_true", default=False),
+        make_option("--assign", dest="assign",
+                    action="store_true", default=False),
     )
 
     def handle(self, *urls, **options):

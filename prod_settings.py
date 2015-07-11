@@ -29,21 +29,21 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 GOOGLE_ANALYTICS_ID = ganalytic
 
-#social_auth
+# social_auth
 VKONTAKTE_APP_ID = VK_APP_ID
 VKONTAKTE_APP_SECRET = VK_API_SECRET
 
-#SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "https")
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTOCOL", "https")
 
-#CACHE_MIDDLEWARE_SECONDS = 60
+# CACHE_MIDDLEWARE_SECONDS = 60
 
-#CACHE_MIDDLEWARE_KEY_PREFIX = "%(proj_name)s"
+# CACHE_MIDDLEWARE_KEY_PREFIX = "%(proj_name)s"
 
-#CACHES = {
-#    "default": {
-#        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
-#        "LOCATION": "127.0.0.1:11211",
-#    }
-#}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+#         "LOCATION": "127.0.0.1:11211",
+#     }
+# }
 
-#SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+# SESSION_ENGINE = "django.contrib.sessions.backends.cache"

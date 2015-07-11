@@ -24,24 +24,26 @@ class CommentEditBadRequest(HttpResponseBadRequest):
     def __init__(self, why):
         super(CommentEditBadRequest, self).__init__()
         if settings.DEBUG:
-            self.content = render_to_string("comments/400-edit-debug.html", {"why": why})
+            self.content = render_to_string(
+                "comments/400-edit-debug.html", {"why": why}
+            )
 
 
 @csrf_protect
 @require_POST
-#@user_passes_test(lambda u: u.has_perm("comments.change_comment")
-#                  or u.has_perm("comment.can_moderate"))
+# @user_passes_test(lambda u: u.has_perm("comments.change_comment")
+#                   or u.has_perm("comment.can_moderate"))
 def edit(request, comment_id, next=None):
     """
     Edit a comment.
-    
+
     Requires HTTP POST and "can change comments" or "can moderate comments",
     permission. Users can also only edit comments they own, unless they are
     granted "comments.can_moderate" permissions.
-    
+
     If ``POST['submit'] == "preview"`` or there are errors,
     a preview template ``comments/preview.html`` will be rendered.
-    
+
     Templates: `comments/edit.html`,
     Context:
         comment
@@ -50,12 +52,12 @@ def edit(request, comment_id, next=None):
     comment = get_object_or_404(
         django_comments.get_model(), pk=comment_id, site__pk=settings.SITE_ID
     )
-    
+
     # Make sure user has correct permissions to change the comment,
     # or return a 401 Unauthorized error.
     if not (request.user == comment.user or request.user.has_perm("comments.can_moderate")):
         return HttpResponse("Unauthorized", status=401)
-    
+
     # Populate POST data with all required initial data
     # unless they are already in POST
     data = request.POST.copy()
@@ -63,7 +65,7 @@ def edit(request, comment_id, next=None):
         data["user_name"] = request.user.get_full_name() or request.user.username
     if not data.get("user_email"):
         data["user_email"] = request.user.email
-    
+
     next = data.get("next", next)
     CommentEditForm = get_edit_form()
     form = CommentEditForm(data, instance=comment)
@@ -76,7 +78,10 @@ def edit(request, comment_id, next=None):
 
     # If there are errors, or if a preview is requested
     if form.errors or "preview" in data:
-        app_label, model = (form.instance.content_type.app_label, form.instance.content_type.model)
+        app_label, model = (
+            form.instance.content_type.app_label,
+            form.instance.content_type.model
+        )
         template_search_list = [
             "comments/%s/%s/edit-preview.html" % (app_label, model),
             "comments/%s/edit-preview.html" % model,
@@ -91,44 +96,47 @@ def edit(request, comment_id, next=None):
             },
             RequestContext(request, {})
         )
-        
+
     # Otherwise, try to save the comment and emit signals
     if form.is_valid():
         MODERATOR_EDITED = "moderator edited"
         flag, created = django_comments.models.CommentFlag.objects.get_or_create(
-            comment = form.instance,
-            user = request.user,
-            flag = MODERATOR_EDITED
+            comment=form.instance,
+            user=request.user,
+            flag=MODERATOR_EDITED
         )
-        
+
         form.instance.is_removed = False
         form.save()
 
         django_comments.signals.comment_was_flagged.send(
-            sender = comment.__class__,
-            comment = comment,
-            flag = flag,
-            created = created,
-            request = request
+            sender=comment.__class__,
+            comment=comment,
+            flag=flag,
+            created=created,
+            request=request
         )
         from django.http import HttpResponseRedirect
         from django.core.urlresolvers import reverse
-        return HttpResponseRedirect(reverse('comment_list_user', kwargs={'username': request.user}))
+        return HttpResponseRedirect(
+            reverse('comment_list_user', kwargs={'username': request.user})
+        )
 
     else:
         # If we got here, raise Bad Request error.
         return CommentEditBadRequest("Could not complete request!")
-        
+
 
 edit_done = django_comments.views.utils.confirmation_view(
-    template = "comments/edited.html",
-    doc = 'Displays a "comment was edited" success page.'
+    template="comments/edited.html",
+    doc='Displays a "comment was edited" success page.'
 )
 
 
 class CommentDetail(DetailView):
     model = Comment
     template_name = 'comments/edit.html'
+
     def get_context_data(self, **kwargs):
         context = super(CommentDetail, self).get_context_data(**kwargs)
         if not (self.request.user == context['comment'].user or self.request.user.has_perm("comments.can_moderate")):

@@ -10,7 +10,8 @@ from django.contrib.messages import info, error
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.timezone import now
 from django.http import HttpResponseRedirect, Http404
-from django.views.generic import ListView, CreateView, DetailView, TemplateView, UpdateView
+from django.views.generic import ListView, CreateView, DetailView,\
+    TemplateView, UpdateView
 
 from mezzanine.accounts import get_profile_model
 from mezzanine.conf import settings
@@ -77,7 +78,8 @@ class ScoreOrderingView(UserFilterView):
         else:
             qs = qs.order_by("-" + self.date_field)
         context["object_list"] = paginate(qs, self.request.GET.get("page", 1),
-            settings.ITEMS_PER_PAGE, settings.MAX_PAGING_LINKS)
+                                          settings.ITEMS_PER_PAGE,
+                                          settings.MAX_PAGING_LINKS)
         context["title"] = self.get_title(context)
         return context
 
@@ -248,6 +250,9 @@ class BlogPostList(BlogPostView, UserFilterView):
     def get_context_data(self, **kwargs):
         context = super(BlogPostList, self).get_context_data(**kwargs)
         context["drafts"] = context["object_list"].filter(status=1)
-        context["object_list"] = paginate(context["object_list"].filter(status=2), self.request.GET.get("page", 1),
-            settings.ITEMS_PER_PAGE, settings.MAX_PAGING_LINKS)
+        context["object_list"] = paginate(
+            context["object_list"].filter(status=2),
+            self.request.GET.get("page", 1),
+            settings.ITEMS_PER_PAGE, settings.MAX_PAGING_LINKS
+        )
         return context

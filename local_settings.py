@@ -23,7 +23,7 @@ DATABASES = {
     }
 }
 
-#social_auth
+# social_auth
 VKONTAKTE_APP_ID = VK_APP_ID
 VKONTAKTE_APP_SECRET = VK_API_SECRET
 

@@ -28,8 +28,9 @@ from mezzanine.utils.urls import slugify
 from django.utils.translation import ugettext_lazy as _
 from mezzanine.blog.models import BlogCategory
 from mezzanine.core.models import RichText
-USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 from mezzanine.utils.models import upload_to
+USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+
 
 class Topic(Displayable, Ownable, RichText):
 
@@ -55,9 +56,11 @@ class Topic(Displayable, Ownable, RichText):
     def save(self, *args, **kwargs):
         keywords = []
         if not self.keywords_string and getattr(settings, "AUTO_TAG", False):
-            variations = lambda word: [word,
+            variations = lambda word: [
+                word,
                 sub("^([^A-Za-z0-9])*|([^A-Za-z0-9]|s)*$", "", word),
-                sub("^([^A-Za-z0-9])*|([^A-Za-z0-9])*$", "", word)]
+                sub("^([^A-Za-z0-9])*|([^A-Za-z0-9])*$", "", word)
+            ]
             keywords = sum(map(variations, split("\s|/", self.title)), [])
         super(Topic, self).save(*args, **kwargs)
         if keywords:
@@ -66,4 +69,4 @@ class Topic(Displayable, Ownable, RichText):
                 self.keywords.add(AssignedKeyword(keyword=keyword))
 
     class Meta:
-        app_label="forum"
+        app_label = "forum"

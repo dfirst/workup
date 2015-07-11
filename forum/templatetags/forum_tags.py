@@ -41,6 +41,7 @@ def order_comments_by_score_for(context, topic):
 def short_timesince(date):
     return timesince(date).split(",")[0]
 
+
 @register.as_tag
 def recent_comments_filter(limit=5):
     """

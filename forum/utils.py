@@ -23,7 +23,7 @@ def order_by_score(queryset, score_fields, date_field, reverse=True):
     # are available for the DB backend.
     timestamp_sqls = {
         "mysql": "UNIX_TIMESTAMP(%s)",
-        "postgresql_psycopg2": "EXTRACT(EPOCH FROM %s)" ,
+        "postgresql_psycopg2": "EXTRACT(EPOCH FROM %s)",
     }
     db_engine = settings.DATABASES[queryset.db]["ENGINE"].rsplit(".", 1)[1]
     timestamp_sql = timestamp_sqls.get(db_engine)

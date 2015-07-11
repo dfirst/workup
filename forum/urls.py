@@ -3,10 +3,12 @@ from __future__ import unicode_literals
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 
-from workup.forum.views import TopicList, TopicCreate, TopicDetail, CommentList, TagList, TopicUpdate, BlogPostList
+from workup.forum.views import TopicList, TopicCreate, TopicDetail, \
+    CommentList, TagList, TopicUpdate, BlogPostList
 
 
-urlpatterns = patterns("",
+urlpatterns = patterns(
+    "",
     url("^forum/$",
         TopicList.as_view(), {"by_score": False},
         name="topic_list_latest"),
@@ -29,10 +31,10 @@ urlpatterns = patterns("",
         TopicDetail.as_view(),
         name="topic_detail"),
     url("^users/(?P<username>.*)/topics/$",
-        TopicList.as_view(template_name = 'accounts/account_profile_topics.html'), {"by_score": False},
+        TopicList.as_view(template_name='accounts/account_profile_topics.html'), {"by_score": False},
         name="topic_list_user"),
     url("^users/(?P<username>.*)/comments/$",
-        CommentList.as_view(template_name = 'accounts/account_profile_comments.html'), {"by_score": False},
+        CommentList.as_view(template_name='accounts/account_profile_comments.html'), {"by_score": False},
         name="comment_list_user"),
     url("^comments/$",
         CommentList.as_view(), {"by_score": False},

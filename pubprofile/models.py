@@ -24,12 +24,27 @@ from workup.settings import MEDIA_ROOT
 
 class UserProfile(models.Model):
     user = models.OneToOneField("auth.User")
-    date_of_birth = models.DateField(null=True, blank=True, help_text=u"дд/мм/гггг", verbose_name=u"Дата рождения")
+    date_of_birth = models.DateField(
+        null=True,
+        blank=True,
+        help_text=u"дд/мм/гггг",
+        verbose_name=u"Дата рождения"
+    )
     bio = models.TextField(null=True, blank=True, verbose_name=u"О себе")
-    avatar = models.ImageField(verbose_name=u"Аватар",
+    avatar = models.ImageField(
+        verbose_name=u"Аватар",
         upload_to=upload_to("pubprofile.UserProfile.avatar", "avatar"),
-        max_length=255, default=upload_to("pubprofile.UserProfile.avatar", "avatar/default-avatar.jpg"))
-    karma = models.IntegerField(default=0, editable=False, verbose_name=u"Карма")
+        max_length=255,
+        default=upload_to(
+            "pubprofile.UserProfile.avatar",
+            "avatar/default-avatar.jpg"
+        )
+    )
+    karma = models.IntegerField(
+        default=0,
+        editable=False,
+        verbose_name=u"Карма"
+    )
 
     def __unicode__(self):
         return "%s (%s)" % (self.user, self.karma)
@@ -50,9 +65,9 @@ def karma(sender, **kwargs):
     rating = kwargs["instance"]
     value = int(rating.value)
     if "created" not in kwargs:
-        value *= -1 #  Rating deleted
+        value *= -1  # Rating deleted
     elif not kwargs["created"]:
-        value *= 2 #  Rating changed
+        value *= 2  # Rating changed
     content_object = rating.content_object
     if rating.user != content_object.user:
         queryset = get_profile_model().objects.filter(user=content_object.user)
@@ -68,7 +83,7 @@ def get_user_avatar(backend, details, response, social_user, uid,
     if url:
         profile = user.userprofile
         urllib.urlretrieve(url, MEDIA_ROOT+"/avatar/"+user.username+'.jpg')
-        profile.avatar = "avatar/"+user.username+'.jpg' # depends on where you saved it
+        profile.avatar = "avatar/"+user.username+'.jpg'  # depends on where you saved it
         profile.save()
         user.email = response['email']
         user.save()
