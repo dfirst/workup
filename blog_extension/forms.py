@@ -7,7 +7,7 @@ BaseBlogForm = modelform_factory(BlogPost, fields=["title", "featured_image", "c
 
 
 class CreateBlogForm(BaseBlogForm):
-    featured_image = forms.CharField()
+    featured_image = forms.CharField(required=False)
     def clean(self):
         return self.cleaned_data
 

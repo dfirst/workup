@@ -36,7 +36,7 @@ class BlogActView(object):
         if obj.status == 1:
             return HttpResponseRedirect(reverse('blog_list_user', kwargs={'username': self.request.user}))
         elif obj.status == 2:
-            return HttpResponseRedirect(self.get_success_url())
+            return HttpResponseRedirect(reverse('blog_post_detail', kwargs={'slug': obj.slug}))
 
 
 class BlogCreate(BlogActView, CreateView):
