@@ -94,7 +94,6 @@
             {% endblock %}
 
             {% block blog_post_detail_sharebuttons %}
-                {% set_short_url_for blog_post %}
                 <a class="btn btn-social-icon btn-lg btn-vk" target="_blank" href="http://vk.com/share.php?url={{ blog_post.short_url|urlencode }}" onclick="_gaq.push(['_trackEvent', 'btn-social-icon', 'click', 'btn-lg']);">
                     <i class="fa fa-vk"></i> Опубликовать вконтакте
                 </a>

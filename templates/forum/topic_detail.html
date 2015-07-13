@@ -85,7 +85,6 @@
             {% endblock %}
 
             {% block topic_detail_sharebuttons %}
-                {% set_short_url_for object %}
                 <a class="btn btn-social-icon btn-lg btn-vk" target="_blank" href="http://vk.com/share.php?url={{ object.short_url|urlencode }}" onclick="_gaq.push(['_trackEvent', 'btn-social-icon', 'click', 'btn-lg']);">
                     <i class="fa fa-vk"></i> Опубликовать вконтакте
                 </a>

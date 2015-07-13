@@ -34,6 +34,7 @@ class BlogActView(object):
         obj = form.save(commit=False)
         obj.featured_image = self.request.POST.get('featured_image', False).replace('/static/media/', '').strip()
         obj.user = self.request.user
+        obj.categories = self.request.POST.getlist('categories', False)
         obj.save()
         if obj.status == 1:
             return HttpResponseRedirect(
