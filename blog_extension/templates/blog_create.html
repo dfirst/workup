@@ -83,7 +83,50 @@
         </div>
     </div>
     <script>
-        CKEDITOR.replace( 'id_content', {language: 'ru'} );
+        var wrappable = [];
+        CKEDITOR.replace( 'id_content', {
+            language: 'ru',
+            on: {
+                instanceReady: function() {
+                    this.on( 'toDataFormat', function( evt ) {
+                        var el, wrap;
+
+                        while ( ( el = wrappable.pop() ) ) {
+                            wrap = el.parent;
+                            // Abort if already wrapped...
+                            if ( wrap && wrap.type == CKEDITOR.NODE_ELEMENT && wrap.attributes[ 'class' ] == 'post-image' )
+                                return wrap;
+                            // Wrap el...
+                            wrap = new CKEDITOR.htmlParser.element( 'div', { 'class': 'post-image' } );
+                            el.replaceWith( wrap );
+                            wrap.add( el );
+                        }
+                    }, null, null, 11);
+
+                    this.dataProcessor.htmlFilter.addRules( {
+                        elements: {
+                            img: function( element ) {
+                                element.attributes.height = '';
+                                element.attributes.width = '';
+                                wrappable.push( element );
+
+                            },
+                            ul: function( element ) {
+                                // Add some class.
+                                element.addClass( 'ul-default' );
+                            },
+                            ol: function( element ) {
+                                // Add some class.
+                                element.addClass( 'ol-default' );
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        CKEDITOR.config.allowedContent = true;
+
         var editor = CKEDITOR.instances.id_content; //reference to instance
         // on `key` event
         editor.on('key', function(){
