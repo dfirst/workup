@@ -28,4 +28,4 @@ h6 {
 /* Images in post content */
 @media (max-width:479px){.content-image{margin:0 0 10px 0}}
 .content-image{position:relative}
-.content-image img{display:block;width:60%;margin:0 auto;}
+.content-image img{display:block;width:70%;margin:0 auto;}

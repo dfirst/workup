@@ -26,7 +26,7 @@ allowed_tags = ("a", "b", "blockquote", "br", "dd", "div", "dl", "dt", "em",
 
 
 def filter_class(name, value):
-    if name == "class" and value in ("post-image", "ul-default", "ol-default"):
+    if name == "class" and value in ("content-image", "ul-default", "ol-default"):
         return True
     else:
         return False
