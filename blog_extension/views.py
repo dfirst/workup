@@ -21,8 +21,8 @@ from .models import BlogImage
 
 allowed_tags = ("a", "b", "blockquote", "br", "dd", "div", "dl", "dt", "em",
                 "h1", "h2", "h3", "h4", "h5", "h6", "i", "img", "li", "ol",
-                "p", "span", "table", "tbody", "td", "tfoot", "th", "thead",
-                "tr", "tt", "u", "ul")
+                "p", "s", "span", "strong", "table", "tbody", "td", "tfoot",
+                "th", "thead", "tr", "tt", "u", "ul")
 
 
 def filter_class(name, value):
