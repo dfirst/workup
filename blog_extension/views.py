@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from future.builtins import super
 import magic
+import bleach
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -16,6 +17,30 @@ from jfu.http import upload_receive, UploadResponse, JFUResponse
 
 from .forms import CreateBlogForm
 from .models import BlogImage
+
+
+allowed_tags = ("a", "b", "blockquote", "br", "dd", "div", "dl", "dt", "em",
+                "h1", "h2", "h3", "h4", "h5", "h6", "i", "img", "li", "ol",
+                "p", "span", "table", "tbody", "td", "tfoot", "th", "thead",
+                "tr", "tt", "u", "ul")
+
+
+def filter_class(name, value):
+    if name == "class" and value in ("post-image", "ul-default", "ol-default"):
+        return True
+    else:
+        return False
+
+
+allowed_attrs = {
+    "a": ["href", "name", "title"],
+    "img": ["align", "alt", "height", "src", "width"],
+    "th": ["colspan", "rowspan"],
+    "td": ["colspan", "rowspan"],
+    "div": filter_class,
+    "ul": filter_class,
+    "ol": filter_class,
+}
 
 
 class BlogActView(object):
@@ -35,6 +60,8 @@ class BlogActView(object):
         obj.featured_image = self.request.POST.get('featured_image', False).replace('/static/media/', '').strip()
         obj.user = self.request.user
         obj.categories = self.request.POST.getlist('categories', False)
+        # filter for html content by Bleach
+        obj.content = bleach.clean(obj.content, tags=allowed_tags, attributes=allowed_attrs, strip_comments=True)
         obj.save()
         if obj.status == 1:
             return HttpResponseRedirect(
