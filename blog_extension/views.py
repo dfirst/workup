@@ -10,6 +10,7 @@ from django.views.generic import CreateView, UpdateView
 from django.views.decorators.http import require_POST
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
+from django.contrib.messages import info
 
 from mezzanine.blog.models import BlogPost
 from jfu.http import upload_receive, UploadResponse, JFUResponse
@@ -21,7 +22,6 @@ from .utils import html_validator
 
 class BlogActView(object):
     model = BlogPost
-    exclude = ('user',)
     form_class = CreateBlogForm
     template_name = 'blog_create.html'
 
@@ -34,12 +34,12 @@ class BlogActView(object):
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.featured_image = self.request.POST.get('featured_image', False).replace('/static/media/', '').strip()
-        obj.user = self.request.user
+        if not hasattr(obj, 'user'):
+            obj.user = self.request.user
         obj.categories = self.request.POST.getlist('categories', False)
         # filter for html content by Bleach
         obj.content = html_validator(obj.content)
         obj.save()
-        from django.contrib.messages import info, error
         if obj.status == 1:
             info(self.request, "Черновик сохранен")
             return HttpResponseRedirect(
