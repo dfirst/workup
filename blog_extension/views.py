@@ -15,9 +15,9 @@ from django.contrib.messages import info
 from mezzanine.blog.models import BlogPost
 from jfu.http import upload_receive, UploadResponse, JFUResponse
 
+from workup.core_extension.utils import html_validator
 from .forms import CreateBlogForm
 from .models import BlogImage
-from .utils import html_validator
 
 
 class BlogActView(object):

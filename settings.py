@@ -257,6 +257,7 @@ INSTALLED_APPS = (
     "workup.forum",
     "workup.comments_extension",
     "workup.blog_extension",
+    "workup.core_extension",
     # "mezzanine.mobile",
 )
 

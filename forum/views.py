@@ -21,7 +21,7 @@ from mezzanine.blog.models import BlogCategory
 from mezzanine.blog.models import BlogPost
 
 from workup.blog_extension.models import BlogImage
-from workup.blog_extension.utils import html_validator
+from workup.core_extension.utils import html_validator
 from workup.forum.forms import TopicForm
 from workup.forum.models import Topic
 from workup.forum.utils import order_by_score
