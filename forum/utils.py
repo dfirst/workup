@@ -7,7 +7,7 @@ from django.utils.timezone import now
 
 def order_by_score(queryset, score_fields, date_field, reverse=True):
     """
-    Take some queryset (links or comments) and order them by score,
+    Take some queryset (Topic/Blog or comments) and order them by score,
     which is basically "rating_sum / age_in_seconds ^ scale", where
     scale is a constant that can be used to control how quickly scores
     reduce over time. To perform this in the database, it needs to

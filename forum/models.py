@@ -36,7 +36,7 @@ class Topic(Displayable, Ownable, RichText):
 
     categories = models.ManyToManyField(BlogCategory,
                                         verbose_name=_("Categories"),
-                                        blank=True, related_name="links")
+                                        blank=True, related_name="topics")
     rating = RatingField()
     comments = CommentsField()
 
