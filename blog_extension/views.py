@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 from future.builtins import super
 import magic
-import bleach
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -17,30 +16,7 @@ from jfu.http import upload_receive, UploadResponse, JFUResponse
 
 from .forms import CreateBlogForm
 from .models import BlogImage
-
-
-allowed_tags = ("a", "b", "blockquote", "br", "dd", "div", "dl", "dt", "em",
-                "h1", "h2", "h3", "h4", "h5", "h6", "i", "img", "li", "ol",
-                "p", "s", "span", "strong", "table", "tbody", "td", "tfoot",
-                "th", "thead", "tr", "tt", "u", "ul")
-
-
-def filter_class(name, value):
-    if name == "class" and value in ("content-image", "ul-default", "ol-default"):
-        return True
-    else:
-        return False
-
-
-allowed_attrs = {
-    "a": ["href", "name", "title"],
-    "img": ["align", "alt", "height", "src", "width"],
-    "th": ["colspan", "rowspan"],
-    "td": ["colspan", "rowspan"],
-    "div": filter_class,
-    "ul": filter_class,
-    "ol": filter_class,
-}
+from .utils import html_validator
 
 
 class BlogActView(object):
@@ -61,15 +37,18 @@ class BlogActView(object):
         obj.user = self.request.user
         obj.categories = self.request.POST.getlist('categories', False)
         # filter for html content by Bleach
-        obj.content = bleach.clean(obj.content, tags=allowed_tags, attributes=allowed_attrs, strip_comments=True)
+        obj.content = html_validator(obj.content)
         obj.save()
+        from django.contrib.messages import info, error
         if obj.status == 1:
+            info(self.request, "Черновик сохранен")
             return HttpResponseRedirect(
                 reverse(
                     'blog_list_user', kwargs={'username': self.request.user}
                 )
             )
         elif obj.status == 2:
+            info(self.request, "Запись сохранена")
             return HttpResponseRedirect(reverse('blog_post_detail', kwargs={'slug': obj.slug}))
 
 
@@ -135,7 +114,6 @@ def upload_delete(request, pk):
             instance.save()
         else:
             raise Http404()
-        return instance.delete()
     except BlogImage.DoesNotExist:
         success = False
 

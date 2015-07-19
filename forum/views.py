@@ -20,6 +20,8 @@ from mezzanine.utils.views import paginate
 from mezzanine.blog.models import BlogCategory
 from mezzanine.blog.models import BlogPost
 
+from workup.blog_extension.models import BlogImage
+from workup.blog_extension.utils import html_validator
 from workup.forum.forms import TopicForm
 from workup.forum.models import Topic
 from workup.forum.utils import order_by_score
@@ -140,15 +142,24 @@ class TopicList(TopicView, ScoreOrderingView):
             return "Форум/Новые темы"
 
 
-class TopicUpdate(UpdateView):
+class TopicEdit(object):
+
+    form_class = TopicForm
+    model = Topic
+
+    def get_context_data(self, **kwargs):
+        context = super(TopicEdit, self).get_context_data(**kwargs)
+        context['title'] = 'Создание/Редактирование темы'
+        context['images'] = BlogImage.objects.filter(user=self.request.user)
+        return context
+
+
+class TopicUpdate(TopicEdit, UpdateView):
     """
     Topic creation view - assigns the user to the new topic, as well
     as setting Mezzanine's ``gen_description`` attribute to ``False``,
     so that we can provide our own descriptions.
     """
-
-    form_class = TopicForm
-    model = Topic
 
     def get_object(self, queryset=None):
         topic = Topic.objects.get(id=self.kwargs['id'])
@@ -157,16 +168,18 @@ class TopicUpdate(UpdateView):
         else:
             raise Http404()
 
+    def form_valid(self, form):
+        form.instance.content = html_validator(form.instance.content)
+        info(self.request, "Тема отредактирована")
+        return super(TopicUpdate, self).form_valid(form)
 
-class TopicCreate(CreateView):
+
+class TopicCreate(TopicEdit, CreateView):
     """
     Topic creation view - assigns the user to the new topic, as well
     as setting Mezzanine's ``gen_description`` attribute to ``False``,
     so that we can provide our own descriptions.
     """
-
-    form_class = TopicForm
-    model = Topic
 
     def form_valid(self, form):
         hours = getattr(settings, "ALLOWED_DUPLICATE_TOPIC_HOURS", None)
@@ -180,11 +193,12 @@ class TopicCreate(CreateView):
             except Topic.DoesNotExist:
                 pass
             else:
-                error(self.request, "Topic exists")
+                error(self.request, "Тема уже существует")
                 return redirect(topic)
         form.instance.user = self.request.user
         form.instance.gen_description = True
-        info(self.request, "Topic created")
+        form.instance.content = html_validator(form.instance.content)
+        info(self.request, "Тема создана")
         return super(TopicCreate, self).form_valid(form)
 
 
