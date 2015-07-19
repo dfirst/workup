@@ -149,9 +149,19 @@ class TopicEdit(object):
 
     def get_context_data(self, **kwargs):
         context = super(TopicEdit, self).get_context_data(**kwargs)
-        context['title'] = 'Создание/Редактирование темы'
-        context['images'] = BlogImage.objects.filter(user=self.request.user)
+        context["title"] = "Создание/Редактирование темы"
+        context["images"] = BlogImage.objects.filter(user=self.request.user)
         return context
+
+    def form_valid(self, form):
+        form.instance.content = html_validator(form.instance.content)
+        if not hasattr(form.instance, "user"):
+            form.instance.user = self.request.user
+            form.instance.gen_description = True
+            info(self.request, "Тема создана")
+        else:
+            info(self.request, "Тема отредактирована")
+        return super(TopicEdit, self).form_valid(form)
 
 
 class TopicUpdate(TopicEdit, UpdateView):
@@ -168,10 +178,6 @@ class TopicUpdate(TopicEdit, UpdateView):
         else:
             raise Http404()
 
-    def form_valid(self, form):
-        form.instance.content = html_validator(form.instance.content)
-        info(self.request, "Тема отредактирована")
-        return super(TopicUpdate, self).form_valid(form)
 
 
 class TopicCreate(TopicEdit, CreateView):
@@ -180,26 +186,7 @@ class TopicCreate(TopicEdit, CreateView):
     as setting Mezzanine's ``gen_description`` attribute to ``False``,
     so that we can provide our own descriptions.
     """
-
-    def form_valid(self, form):
-        hours = getattr(settings, "ALLOWED_DUPLICATE_TOPIC_HOURS", None)
-        if hours and form.instance.topic:
-            lookup = {
-                "topic": form.instance.topic,
-                "publish_date__gt": now() - timedelta(hours=hours),
-            }
-            try:
-                topic = Topic.objects.get(**lookup)
-            except Topic.DoesNotExist:
-                pass
-            else:
-                error(self.request, "Тема уже существует")
-                return redirect(topic)
-        form.instance.user = self.request.user
-        form.instance.gen_description = True
-        form.instance.content = html_validator(form.instance.content)
-        info(self.request, "Тема создана")
-        return super(TopicCreate, self).form_valid(form)
+    pass
 
 
 class TopicDetail(TopicView, DetailView):
