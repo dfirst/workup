@@ -76,6 +76,7 @@ urlpatterns += patterns(
     url(r"^comments/", include("workup.comments_extension.urls")),
     ("^", include("workup.blog_extension.urls")),
     ("^", include("workup.forum.urls")),
+    ("^", include("workup.pubprofile.urls")),
     ("^", include("mezzanine.urls")),
 
     # MOUNTING MEZZANINE UNDER A PREFIX

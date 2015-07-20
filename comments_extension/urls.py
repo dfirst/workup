@@ -18,10 +18,7 @@ urlpatterns = patterns(
     url("^comments/$",
         CommentList.as_view(), {"by_score": False},
         name="comment_list_latest"),
-    url("^best/$",
+    url("^comments/best/$",
         CommentList.as_view(),
         name="comment_list_best"),
-    url("^users/(?P<username>.*)/comments/$",
-        CommentList.as_view(template_name='accounts/account_profile_comments.html'), {"by_score": False},
-        name="comment_list_user"),
 )
