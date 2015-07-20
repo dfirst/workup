@@ -21,69 +21,11 @@ from mezzanine.blog.models import BlogCategory
 from mezzanine.blog.models import BlogPost
 
 from workup.blog_extension.models import BlogImage
-from workup.core_extension.utils import html_validator
+from workup.core_extension.utils import html_validator, order_by_score
+from workup.core_extension.views import ScoreOrderingView
+from workup.pubprofile.views import USER_PROFILE_RELATED_NAME, UserFilterView
 from workup.forum.forms import TopicForm
 from workup.forum.models import Topic
-from workup.forum.utils import order_by_score
-
-
-# Returns the name to be used for reverse profile lookups from the user
-# object. That's "profile" for the ``drum.topics.Profile``, but otherwise
-# depends on the model specified in ``AUTH_PROFILE_MODULE``.
-USER_PROFILE_RELATED_NAME = get_profile_model().user.field.related_query_name()
-
-
-class UserFilterView(ListView):
-    """
-    List view that puts a ``profile_user`` variable into the context,
-    which is optionally retrieved by a ``username`` urlpattern var.
-    If a user is loaded, ``object_list`` is filtered by the loaded
-    user. Used for showing lists of topics and comments.
-    """
-
-    def get_context_data(self, **kwargs):
-        context = super(UserFilterView, self).get_context_data(**kwargs)
-        try:
-            username = self.kwargs["username"]
-        except KeyError:
-            profile_user = None
-        else:
-            users = User.objects.select_related(USER_PROFILE_RELATED_NAME)
-            lookup = {"username__iexact": username, "is_active": True}
-            profile_user = get_object_or_404(users, **lookup)
-            qs = context["object_list"].filter(user=profile_user)
-            context["object_list"] = qs
-        context["profile_user"] = profile_user
-        context["no_data"] = ("Whoa, there's like, literally no data here, "
-                              "like seriously, I totally got nothin.")
-        return context
-
-
-class ScoreOrderingView(UserFilterView):
-    """
-    List view that optionally orders ``object_list`` by calculated
-    score. Subclasses must defined a ``date_field`` attribute for the
-    related model, that's used to determine time-scaled scoring.
-    Ordering by score is the default behaviour, but can be
-    overridden by passing ``False`` to the ``by_score`` arg in
-    urlpatterns, in which case ``object_list`` is sorted by most
-    recent, using the ``date_field`` attribute. Used for showing lists
-    of topics and comments.
-    """
-
-    def get_context_data(self, **kwargs):
-        context = super(ScoreOrderingView, self).get_context_data(**kwargs)
-        qs = context["object_list"]
-        context["by_score"] = self.kwargs.get("by_score", True)
-        if context["by_score"]:
-            qs = order_by_score(qs, self.score_fields, self.date_field)
-        else:
-            qs = qs.order_by("-" + self.date_field)
-        context["object_list"] = paginate(qs, self.request.GET.get("page", 1),
-                                          settings.ITEMS_PER_PAGE,
-                                          settings.MAX_PAGING_LINKS)
-        context["title"] = self.get_title(context)
-        return context
 
 
 class TopicView(object):
