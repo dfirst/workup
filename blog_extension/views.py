@@ -38,9 +38,11 @@ class BlogActView(object):
         obj.featured_image = self.request.POST.get('featured_image', False).replace('/static/media/', '').strip()
         if not hasattr(obj, 'user'):
             obj.user = self.request.user
-        obj.categories = self.request.POST.getlist('categories', False)
         # filter for html content by Bleach
         obj.content = html_validator(obj.content)
+        obj.save()
+        # dirty solution to save category
+        obj.categories = self.request.POST.getlist('categories', False)
         obj.save()
         if obj.status == 1:
             info(self.request, "Черновик сохранен")
