@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from future.builtins import super
 import magic
 
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.views.generic import CreateView, UpdateView
@@ -12,10 +11,13 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import info
 
+from mezzanine.conf import settings
 from mezzanine.blog.models import BlogPost
+from mezzanine.utils.views import paginate
 from jfu.http import upload_receive, UploadResponse, JFUResponse
 
 from workup.core_extension.utils import html_validator
+from workup.pubprofile.views import USER_PROFILE_RELATED_NAME, UserFilterView
 from .forms import CreateBlogForm
 from .models import BlogImage
 
@@ -68,6 +70,34 @@ class BlogUpdate(BlogActView, UpdateView):
             return blog_object
         else:
             raise Http404()
+
+
+class BlogPostView(object):
+    """
+    List and detail view mixin for blogs - just defines the correct
+    queryset.
+    """
+    def get_queryset(self):
+        return BlogPost.objects.select_related(
+            "user",
+            "user__%s" % USER_PROFILE_RELATED_NAME
+        )
+
+
+class BlogPostList(BlogPostView, UserFilterView):
+    """
+    List view for blogs, which can be for a single user
+    profile page).
+    """
+    def get_context_data(self, **kwargs):
+        context = super(BlogPostList, self).get_context_data(**kwargs)
+        context["drafts"] = context["object_list"].filter(status=1)
+        context["object_list"] = paginate(
+            context["object_list"].filter(status=2),
+            self.request.GET.get("page", 1),
+            settings.ITEMS_PER_PAGE, settings.MAX_PAGING_LINKS
+        )
+        return context
 
 
 @login_required

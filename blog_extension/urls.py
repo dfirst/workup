@@ -4,7 +4,7 @@ from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 
 from workup.blog_extension.views import \
-    BlogCreate, BlogUpdate, upload, upload_delete
+    BlogCreate, BlogUpdate, BlogPostList, upload, upload_delete
 
 
 urlpatterns = patterns(
@@ -15,6 +15,9 @@ urlpatterns = patterns(
     url("^blog/edit/(?P<id>.*)/$",
         login_required(BlogUpdate.as_view()),
         name="blog_edit"),
+    url("^users/(?P<username>.*)/blogs/$",
+        BlogPostList.as_view(template_name='accounts/account_profile_blogs.html'),
+        name="blog_list_user"),
     url('^blog/upload/', upload, name='jfu_upload'),
     url('^blog/delete/(?P<pk>\d+)$', upload_delete, name='jfu_delete'),
 )

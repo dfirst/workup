@@ -121,7 +121,6 @@ class TopicUpdate(TopicEdit, UpdateView):
             raise Http404()
 
 
-
 class TopicCreate(TopicEdit, CreateView):
     """
     Topic creation view - assigns the user to the new topic, as well
@@ -171,31 +170,3 @@ class CommentList(ScoreOrderingView):
 
 class TagList(TemplateView):
     template_name = "topics/tag_list.html"
-
-
-class BlogPostView(object):
-    """
-    List and detail view mixin for blogs - just defines the correct
-    queryset.
-    """
-    def get_queryset(self):
-        return BlogPost.objects.select_related(
-            "user",
-            "user__%s" % USER_PROFILE_RELATED_NAME
-        )
-
-
-class BlogPostList(BlogPostView, UserFilterView):
-    """
-    List view for blogs, which can be for a single user
-    profile page).
-    """
-    def get_context_data(self, **kwargs):
-        context = super(BlogPostList, self).get_context_data(**kwargs)
-        context["drafts"] = context["object_list"].filter(status=1)
-        context["object_list"] = paginate(
-            context["object_list"].filter(status=2),
-            self.request.GET.get("page", 1),
-            settings.ITEMS_PER_PAGE, settings.MAX_PAGING_LINKS
-        )
-        return context
