@@ -17,6 +17,8 @@
                                 </a>
                             {% endif %}
                         </li>
+                    {% empty %}
+                        <p>{{ no_data }}</p>
                     {% endfor %}
                 </ul>
                 {% pagination_for object_list %}

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from mezzanine.accounts import get_profile_model
 from django.views.generic import ListView
@@ -32,6 +33,5 @@ class UserFilterView(ListView):
             qs = context["object_list"].filter(user=profile_user)
             context["object_list"] = qs
         context["profile_user"] = profile_user
-        context["no_data"] = ("Whoa, there's like, literally no data here, "
-                              "like seriously, I totally got nothin.")
+        context["no_data"] = ("Похоже на то, что тут ничего нет.")
         return context
