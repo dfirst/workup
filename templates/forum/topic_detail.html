@@ -85,7 +85,7 @@
             {% endblock %}
 
             {% block topic_detail_sharebuttons %}
-                <a class="btn btn-social-icon btn-lg btn-vk" target="_blank" href="http://vk.com/share.php?url={{ object.short_url|urlencode }}" onclick="_gaq.push(['_trackEvent', 'btn-social-icon', 'click', 'btn-lg']);">
+                <a class="btn btn-social-icon btn-lg btn-vk" target="_blank" href="http://vk.com/share.php?url={{ request.get_host }}{{ object.get_absolute_url|urlencode }}" onclick="_gaq.push(['_trackEvent', 'btn-social-icon', 'click', 'btn-lg']);">
                     <i class="fa fa-vk"></i> Опубликовать вконтакте
                 </a>
             {% endblock %}
