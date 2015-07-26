@@ -30,7 +30,10 @@ class BlogActView(object):
     def get_context_data(self, **kwargs):
         context = super(BlogActView, self).get_context_data(**kwargs)
         context['title'] = 'Создание/Редактирование записи'
-        context['images'] = BlogImage.objects.filter(user=self.request.user)
+        context['images'] = BlogImage.objects.filter(
+            user=self.request.user,
+            status=2
+        )
         return context
 
     def form_valid(self, form):
@@ -42,7 +45,10 @@ class BlogActView(object):
         obj.content = html_validator(obj.content)
         obj.save()
         # dirty solution to save category
-        obj.categories = self.request.POST.getlist('categories', False)
+        try:
+            obj.categories = self.request.POST.getlist('categories', False)
+        except:
+            pass
         obj.save()
         if obj.status == 1:
             info(self.request, "Черновик сохранен")
