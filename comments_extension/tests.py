@@ -3,12 +3,14 @@ from django.test.client import RequestFactory
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
+from django.template import Context, Template
 
 from mezzanine.conf import settings
 from mezzanine.blog.models import BlogPost
 from mezzanine.generic.models import ThreadedComment
 from mezzanine.generic.forms import ThreadedCommentForm
 
+from .forms import CommentEditForm
 
 password = 'Tester'
 
@@ -65,7 +67,6 @@ class CommentsExtensionTest(TestCase):
             self.client_1.get(reverse('blog_post_detail', kwargs={'slug': blog_post.slug})),
             'Test comment for me'
         )
-        from .forms import CommentEditForm
         # Test comments edit form
         instance = ThreadedComment.objects.get(pk=1)
         security_data = CommentEditForm({}, instance=instance).generate_security_data()
@@ -98,8 +99,7 @@ class CommentsExtensionTest(TestCase):
                   }
         self.assertTrue(ThreadedCommentForm(request, blog_post, kwargs).is_valid())
         # Test comments_extension template tags
-        from django.template import Context, Template
-        test_teplate = Template('''
+        test_template = Template('''
         {% load comments_generic comments_extension %}
         {% recent_comments_filter 5 as recent_comments %}
         <tag>{{recent_comments|length}}</tag>
@@ -107,6 +107,6 @@ class CommentsExtensionTest(TestCase):
         {% get_comment_edit_form for comment as form %}
         {{ form }}
         ''').render(Context({'comment': instance}))
-        self.assertIn('<tag>5</tag>', test_teplate)
-        self.assertIn('<tag>/comments/edit/1/</tag>', test_teplate)
-        self.assertIn('id="id_comment"', test_teplate)
+        self.assertIn('<tag>5</tag>', test_template)
+        self.assertIn('<tag>/comments/edit/1/</tag>', test_template)
+        self.assertIn('id="id_comment"', test_template)
