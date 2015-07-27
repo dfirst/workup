@@ -37,10 +37,10 @@ def recent_comments_filter(limit=5):
 
     Usage::
 
-        {% blog_recent_posts 5 as recent_posts %}
-        {% blog_recent_posts limit=5 tag="django" as recent_posts %}
-        {% blog_recent_posts limit=5 category="python" as recent_posts %}
-        {% blog_recent_posts 5 username=admin as recent_posts %}
+        {% recent_comments_filter 5 as recent_comments %}
+        {% recent_comments_filter limit=5 tag="django" as recent_comments %}
+        {% recent_comments_filter limit=5 category="python" as recent_comments %}
+        {% recent_comments_filter 5 username=admin as recent_comments %}
 
     """
     recent_comments = ThreadedComment.objects.all().select_related("user")
