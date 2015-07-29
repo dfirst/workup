@@ -14,6 +14,7 @@ from django.contrib.messages import info
 from mezzanine.conf import settings
 from mezzanine.blog.models import BlogPost
 from mezzanine.utils.views import paginate
+from mezzanine.generic.models import AssignedKeyword, Keyword
 from jfu.http import upload_receive, UploadResponse, JFUResponse
 
 from workup.core_extension.utils import html_validator
@@ -44,6 +45,16 @@ class BlogActView(object):
         # filter for html content by Bleach
         obj.content = html_validator(obj.content)
         obj.save()
+        # dirty solution to save keywords
+        keywords = Keyword.objects
+        assigned_keywords = list()
+        request_keywords = list(set(unicode(self.request.POST.get('keywords_1', False)).replace(' ','').split(',')))
+        if len(request_keywords)>=1:
+            for keyword in request_keywords:
+                keyword = keywords.filter(title=keyword)
+                if len(keyword)>=1:
+                    assigned_keywords.append(AssignedKeyword(keyword_id=keyword[0].id))
+        obj.keywords = assigned_keywords
         # dirty solution to save category
         try:
             obj.categories = self.request.POST.getlist('categories', False)
