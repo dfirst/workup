@@ -99,14 +99,14 @@ class BlogExtensionTest(TestCase):
         )
         self.client_1.post(reverse('topic_edit', kwargs={'id': 1}),
                            {'title': 'Test note',
-                            'content': '<script><b>So slow so tired</b></script>',})
+                            'content': '<script><b>So slow so </div>tired</b></script>',})
         self.assertContains(
             self.client_1.get(reverse('topic_edit', kwargs={'id': 1})),
             '<b>So slow so tired</b>'
         )
         self.assertNotContains(
             self.client_1.get(reverse('topic_edit', kwargs={'id': 1})),
-            '<script>So slow so tired</script>'
+            '<script><b>So slow so tired</b></script>'
         )
         # Topic owner test
         self.client_2.post(
