@@ -44,23 +44,40 @@ class BlogExtensionTest(TestCase):
                            )
         # Forum category, keyword filter test
         category = BlogCategory.objects.create(title='Category_Test')
-        tag = Keyword.objects.create(title='Test')
+        tag = Keyword.objects.create(title='test_1')
+        Keyword.objects.create(title='test_2')
         self.client_1.post(reverse('topic_create'),
                            {'title': 'Test note filter',
                             'content': 'Im testing this content and i like it',
-                            'categories': [1],
-                            'keywords': tag,
+                            'categories': [category.id],
+                            'keywords_1': 'test_1, test_2, test_3, test_1, test_2',
                             }
                            )
+        # Test Keywords
+        topic = Topic.objects.get(title='Test note filter')
+        self.assertContains(
+            self.client_1.get(reverse('topic_edit', kwargs={'id': topic.id})), 'value="test_2, test_1"'
+        )
+        self.assertEqual(
+            len(topic.keywords.all()), 2
+        )
         # Forum category filter test
         self.assertNotContains(
             self.client_1.get(reverse('topic_list_category', kwargs={'category':category.slug})),
             'Test note basic'
         )
+        self.assertContains(
+            self.client_1.get(reverse('topic_list_category', kwargs={'category':category.slug})),
+            'Test note filter'
+        )
         # Forum tags filter test
         self.assertNotContains(
             self.client_1.get(reverse('topic_list_tag', kwargs={'tag': tag.slug})),
             'Test note basics'
+        )
+        self.assertContains(
+            self.client_1.get(reverse('topic_list_tag', kwargs={'tag': tag.slug})),
+            'Test note filter'
         )
         # Forum main page test
         self.assertContains(

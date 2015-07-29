@@ -11,7 +11,7 @@ from workup.forum.models import Topic
 class TopicAdmin(DisplayableAdmin):
 
     list_display = ("id", "title", "status", "publish_date",
-                    "user", "comments_count", "rating_sum", "content")
+                    "user", "comments_count", "rating_sum")
     list_display_links = ("id",)
     list_editable = ()
     list_filter = ("status", "user__username")
@@ -21,7 +21,7 @@ class TopicAdmin(DisplayableAdmin):
     fieldsets = (
         (None, {
             "fields": ("title", "status", "publish_date", "user",
-                       "description", "categories", "content"),
+                       "description", "categories", "content", "keywords"),
         }),
     )
 

@@ -6,7 +6,7 @@ from workup.forum.models import Topic
 
 
 BaseTopicForm = modelform_factory(Topic, fields=["title", "categories",
-                                                "content"])
+                                                "content", "keywords"])
 
 
 class TopicForm(BaseTopicForm):

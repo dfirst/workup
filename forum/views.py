@@ -9,13 +9,14 @@ from django.contrib.messages import info, error
 
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.timezone import now
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.views.generic import ListView, CreateView, DetailView,\
     TemplateView, UpdateView
 
 from mezzanine.accounts import get_profile_model
 from mezzanine.conf import settings
-from mezzanine.generic.models import ThreadedComment, Keyword
+from mezzanine.generic.models import ThreadedComment, Keyword, AssignedKeyword
 from mezzanine.utils.views import paginate
 from mezzanine.blog.models import BlogCategory
 from mezzanine.blog.models import BlogPost
@@ -96,14 +97,32 @@ class TopicEdit(object):
         return context
 
     def form_valid(self, form):
-        form.instance.content = html_validator(form.instance.content)
-        if not hasattr(form.instance, "user"):
-            form.instance.user = self.request.user
-            form.instance.gen_description = True
+        obj = form.save(commit=False)
+        if not hasattr(obj, 'user'):
+            obj.user = self.request.user
             info(self.request, "Тема создана")
         else:
             info(self.request, "Тема отредактирована")
-        return super(TopicEdit, self).form_valid(form)
+        # filter for html content by Bleach
+        obj.content = html_validator(obj.content)
+        obj.save()
+        # saving keywords
+        keywords = Keyword.objects
+        assigned_keywords = list()
+        request_keywords = list(set(unicode(self.request.POST.get('keywords_1', False)).replace(' ','').split(',')))
+        if len(request_keywords)>=1:
+            for keyword in request_keywords:
+                keyword = keywords.filter(title=keyword)
+                if len(keyword)>=1:
+                    assigned_keywords.append(AssignedKeyword(keyword_id=keyword[0].id))
+        obj.keywords = assigned_keywords
+        # dirty solution to save category
+        try:
+            obj.categories = self.request.POST.getlist('categories', False)
+        except:
+            pass
+        obj.save()
+        return HttpResponseRedirect(reverse('topic_detail', kwargs={'slug': obj.slug}))
 
 
 class TopicUpdate(TopicEdit, UpdateView):
