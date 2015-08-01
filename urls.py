@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
@@ -19,6 +20,13 @@ urlpatterns = i18n_patterns(
     # admin interface, which would be marginally more secure.
     ("^admin/", include(admin.site.urls)),
 )
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += patterns(
+        "",
+        url(r"^__debug__/", include(debug_toolbar.urls)),
+    )
 
 urlpatterns += patterns(
     '',

@@ -435,3 +435,8 @@ SOCIAL_AUTH_PIPELINE = (
 VK_EXTRA_DATA = ['photo_max_orig']
 
 VK_EXTRA_SCOPE = ['email']
+
+# Debug toolbar
+if DEBUG:
+    DEBUG_TOOLBAR_PATCH_SETTINGS = False
+    MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)

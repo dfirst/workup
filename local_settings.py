@@ -32,5 +32,5 @@ DATABASES = {
     }
 }
 
-#social_auth
+# Social_auth
 SOCIAL_AUTH_RAISE_EXCEPTIONS = DEBUG
