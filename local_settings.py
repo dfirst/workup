@@ -1,4 +1,13 @@
-from .secret import VK_API_SECRET, VK_APP_ID
+try:
+    from .secret import VK_API_SECRET, VK_APP_ID
+
+
+    # VK local social_auth
+    VKONTAKTE_APP_ID = VK_APP_ID
+    VKONTAKTE_APP_SECRET = VK_API_SECRET
+except ImportError:
+    pass
+
 
 DEBUG = True
 
@@ -23,8 +32,5 @@ DATABASES = {
     }
 }
 
-# social_auth
-VKONTAKTE_APP_ID = VK_APP_ID
-VKONTAKTE_APP_SECRET = VK_API_SECRET
-
+#social_auth
 SOCIAL_AUTH_RAISE_EXCEPTIONS = DEBUG
