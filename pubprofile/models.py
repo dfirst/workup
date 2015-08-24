@@ -2,13 +2,7 @@
 from __future__ import unicode_literals
 from future.builtins import int
 
-try:
-    from urllib.parse import urlparse
-except ImportError:
-    from urlparse import urlparse
-
 import urllib
-from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
@@ -83,7 +77,8 @@ def get_user_avatar(backend, details, response, social_user, uid,
     if url:
         profile = user.userprofile
         urllib.urlretrieve(url, MEDIA_ROOT+"/avatar/"+user.username+'.jpg')
-        profile.avatar = "avatar/"+user.username+'.jpg'  # depends on where you saved it
+        # depends on where you saved it
+        profile.avatar = "avatar/"+user.username+'.jpg'
         profile.save()
         user.email = response['email']
         user.save()

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render
 from mezzanine.accounts import get_profile_model
 from django.views.generic import ListView
 from django.contrib.auth.models import User
