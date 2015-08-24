@@ -63,11 +63,11 @@ class BlogExtensionTest(TestCase):
         )
         # Forum category filter test
         self.assertNotContains(
-            self.client_1.get(reverse('topic_list_category', kwargs={'category':category.slug})),
+            self.client_1.get(reverse('topic_list_category', kwargs={'category': category.slug})),
             'Test note basic'
         )
         self.assertContains(
-            self.client_1.get(reverse('topic_list_category', kwargs={'category':category.slug})),
+            self.client_1.get(reverse('topic_list_category', kwargs={'category': category.slug})),
             'Test note filter'
         )
         # Forum tags filter test
@@ -99,7 +99,7 @@ class BlogExtensionTest(TestCase):
         )
         self.client_1.post(reverse('topic_edit', kwargs={'id': 1}),
                            {'title': 'Test note',
-                            'content': '<script><b>So slow so </div>tired</b></script>',})
+                            'content': '<script><b>So slow so </div>tired</b></script>', })
         self.assertContains(
             self.client_1.get(reverse('topic_edit', kwargs={'id': 1})),
             '<b>So slow so tired</b>'
