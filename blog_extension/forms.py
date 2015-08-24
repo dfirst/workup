@@ -5,7 +5,8 @@ from mezzanine.blog.models import BlogPost
 
 BaseBlogForm = modelform_factory(
     BlogPost,
-    fields=["title", "featured_image", "content", "status", "categories", "keywords"]
+    fields=["title", "featured_image", "content",
+            "status", "categories", "keywords"]
 )
 
 
