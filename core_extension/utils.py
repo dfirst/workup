@@ -74,4 +74,5 @@ allowed_attrs = {
 
 
 def html_validator(html):
-    return bleach.clean(html, tags=allowed_tags, attributes=allowed_attrs, strip_comments=True)
+    return bleach.clean(html, tags=allowed_tags,
+                        attributes=allowed_attrs, strip_comments=True)

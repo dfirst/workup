@@ -3,7 +3,6 @@ from __future__ import absolute_import
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.utils.html import escape
-from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404, render_to_response
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
@@ -73,8 +72,8 @@ def edit(request, comment_id, next=None):
     if form.security_errors():
         # NOTE: security hash fails!
         return CommentEditBadRequest(
-            "The comment form failed security verification: %s" % \
-                escape(str(form.security_errors())))
+            "The comment form failed security verification: %s" % escape(
+                str(form.security_errors())))
 
     # If there are errors, or if a preview is requested
     if form.errors or "preview" in data:

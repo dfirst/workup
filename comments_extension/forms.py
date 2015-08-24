@@ -3,7 +3,7 @@ from django import forms
 from django.conf import settings
 from django.utils.text import get_text_list
 from django.utils.translation import ungettext, ugettext, ugettext_lazy as _
-from django.forms.util import ErrorDict
+from django.forms.utils import ErrorDict
 from django.utils.crypto import salted_hmac, constant_time_compare
 
 from django_comments import forms as comments_forms, models as comments_models
@@ -93,7 +93,8 @@ class CommentEditForm(forms.ModelForm):
             int(time.mktime(self.instance.submit_date.timetuple()))
         )
         security_hash_dict = {
-            "content_type": self.data.get("content_type", str(self.instance.content_type.pk)),
+            "content_type": self.data.get("content_type",
+                                          str(self.instance.content_type.pk)),
             "object_pk": self.data.get("object_pk", str(self.instance.pk)),
             "timestamp": self.data.get("timestamp", timestamp)
         }
