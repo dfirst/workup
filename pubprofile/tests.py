@@ -44,7 +44,7 @@ class CommentsExtensionTest(TestCase):
         )
         # Test rating system
         data = RatingForm(None, blog_post).initial
-        rating_list = [-1,-1,1,1,1]
+        rating_list = [-1, -1, 1, 1, 1]
         for value in rating_list:
             data["value"] = value
             # Simulate voting by object author and user
@@ -63,21 +63,25 @@ class CommentsExtensionTest(TestCase):
         BlogPost.objects.create(title='Published object', user=self.user)
         BlogPost.objects.create(title='Draft object', user=self.user, status=1)
         # Test account blogpost owner
-        response = self.client_1.get(reverse('blog_list_user', kwargs={'username': self.user}))
+        response = self.client_1.get(reverse('blog_list_user',
+                                             kwargs={'username': self.user}))
         self.assertContains(response, 'Published object')
         self.assertContains(response, 'Draft object')
         # Test account blogpost user
-        response = self.client_2.get(reverse('blog_list_user', kwargs={'username': self.user}))
+        response = self.client_2.get(reverse('blog_list_user',
+                                             kwargs={'username': self.user}))
         self.assertContains(response, 'Published object')
         self.assertNotContains(response, 'Draft object')
         # Test account forum
         Topic.objects.create(title='Published object', user=self.user)
-        response = self.client_1.get(reverse('topic_list_user', kwargs={'username': self.user}))
+        response = self.client_1.get(reverse('topic_list_user',
+                                             kwargs={'username': self.user}))
         # Test account forum owner
         self.assertContains(response, 'Published object')
         self.assertContains(response, 'Правка')
         # Test account forum user
-        response = self.client_2.get(reverse('topic_list_user', kwargs={'username': self.user}))
+        response = self.client_2.get(reverse('topic_list_user',
+                                             kwargs={'username': self.user}))
         self.assertContains(response, 'Published object')
         self.assertNotContains(response, 'Правка')
         # Test account comments
@@ -92,14 +96,19 @@ class CommentsExtensionTest(TestCase):
                   }
         ThreadedComment.objects.create(**kwargs)
         # Test account comments owner
-        response = self.client_1.get(reverse('comment_list_user', kwargs={'username': self.user}))
+        response = self.client_1.get(reverse('comment_list_user',
+                                             kwargs={'username': self.user}))
         self.assertContains(response, 'Test comment for me')
         self.assertContains(response, 'Правка')
         # Test account comments user
-        response = self.client_2.get(reverse('comment_list_user', kwargs={'username': self.user}))
+        response = self.client_2.get(reverse('comment_list_user',
+                                             kwargs={'username': self.user}))
         self.assertContains(response, 'Test comment for me')
         self.assertNotContains(response, 'Правка')
         # Test profile url
         self.assertEqual(
-            self.client_1.get(reverse('profile', kwargs={'username': self.user})).status_code, 200
+            self.client_1.get(
+                reverse('profile',
+                        kwargs={'username': self.user})).status_code,
+            200
         )

@@ -1,4 +1,5 @@
 from __future__ import absolute_import, unicode_literals
+import os
 
 ######################
 # MEZZANINE SETTINGS #
@@ -150,7 +151,7 @@ AUTHENTICATION_BACKENDS = ("mezzanine.core.auth_backends.MezzanineBackend",)
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-#   "django.contrib.staticfiles.finders.DefaultStorageFinder",
+    # "django.contrib.staticfiles.finders.DefaultStorageFinder",
 )
 
 # The numeric mode to set newly-uploaded files to. The value should be
@@ -183,8 +184,6 @@ DATABASES = {
 #########
 # PATHS #
 #########
-
-import os
 
 # Full filesystem path to the project.
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -239,6 +238,7 @@ INSTALLED_APPS = (
     "django.contrib.sites",
     "django.contrib.sitemaps",
     "django.contrib.staticfiles",
+    "django_comments",
     "mezzanine.boot",
     "mezzanine.conf",
     "mezzanine.core",
@@ -314,6 +314,7 @@ OPTIONAL_APPS = (
     "debug_toolbar",
     "django_extensions",
     "compressor",
+    "django_coverage",
     PACKAGE_NAME_FILEBROWSER,
     PACKAGE_NAME_GRAPPELLI,
 )
@@ -435,6 +436,8 @@ SOCIAL_AUTH_PIPELINE = (
 VK_EXTRA_DATA = ['photo_max_orig']
 
 VK_EXTRA_SCOPE = ['email']
+
+COMMENTS_ALLOW_PROFANITIES = True
 
 # Debug toolbar
 if DEBUG:

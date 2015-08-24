@@ -5,7 +5,7 @@ from string import punctuation
 
 from django.db import connection
 from django.core.management.base import BaseCommand
-from mezzanine.generic.models import AssignedKeyword, Keyword
+from mezzanine.generic.models import Keyword
 from mezzanine.utils.urls import slugify
 
 from workup.forum.models import Topic

@@ -1,7 +1,12 @@
 # Local development dependencies go here
 -r base.txt
+# tests coverage for django
 coverage==3.7.1
+django-coverage
+# selenium
 selenium==2.47.0
+# Pep8 and other code test
+flake8
 
 # django-debug-toolbar that works with Django 1.5+
 django-debug-toolbar==1.3.2

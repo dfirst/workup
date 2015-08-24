@@ -1,16 +1,6 @@
 from __future__ import absolute_import
 from django.core import urlresolvers
-
-# Try to import django_comments otherwise fallback to the django contrib comments
-try:
-    import django_comments as django_comments
-except ImportError:
-    try:
-        from django.contrib import comments as django_comments
-    except ImportError:
-        raise ImportError('django-comments-extension requires django-contrib-comments to be installed or the deprecated'
-                          ' (as of django 1.6) django.contrib.comments.')
-
+import django_comments
 from .forms import CommentEditForm
 
 

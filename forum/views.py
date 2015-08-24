@@ -2,29 +2,20 @@
 from __future__ import unicode_literals
 from future.builtins import super
 
-from datetime import timedelta
-
-from django.contrib.auth.models import User
-from django.contrib.messages import info, error
-
-from django.shortcuts import get_object_or_404, redirect
-from django.utils.timezone import now
+from django.contrib.messages import info
+from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
-from django.views.generic import ListView, CreateView, DetailView,\
+from django.views.generic import CreateView, DetailView,\
     TemplateView, UpdateView
 
-from mezzanine.accounts import get_profile_model
-from mezzanine.conf import settings
-from mezzanine.generic.models import ThreadedComment, Keyword, AssignedKeyword
-from mezzanine.utils.views import paginate
+from mezzanine.generic.models import Keyword, AssignedKeyword
 from mezzanine.blog.models import BlogCategory
-from mezzanine.blog.models import BlogPost
 
 from workup.blog_extension.models import BlogImage
-from workup.core_extension.utils import html_validator, order_by_score
+from workup.core_extension.utils import html_validator
 from workup.core_extension.views import ScoreOrderingView
-from workup.pubprofile.views import USER_PROFILE_RELATED_NAME, UserFilterView
+from workup.pubprofile.views import USER_PROFILE_RELATED_NAME
 from workup.forum.forms import TopicForm
 from workup.forum.models import Topic
 
@@ -109,12 +100,14 @@ class TopicEdit(object):
         # saving keywords
         keywords = Keyword.objects
         assigned_keywords = list()
-        request_keywords = list(set(unicode(self.request.POST.get('keywords_1', False)).replace(' ','').split(',')))
-        if len(request_keywords)>=1:
+        request_keywords = list(set(unicode(self.request.POST.get(
+            'keywords_1', False)).replace(' ', '').split(',')))
+        if len(request_keywords) >= 1:
             for keyword in request_keywords:
                 keyword = keywords.filter(title=keyword)
-                if len(keyword)>=1:
-                    assigned_keywords.append(AssignedKeyword(keyword_id=keyword[0].id))
+                if len(keyword) >= 1:
+                    assigned_keywords.append(
+                        AssignedKeyword(keyword_id=keyword[0].id))
         obj.keywords = assigned_keywords
         # dirty solution to save category
         try:
@@ -122,7 +115,8 @@ class TopicEdit(object):
         except:
             pass
         obj.save()
-        return HttpResponseRedirect(reverse('topic_detail', kwargs={'slug': obj.slug}))
+        return HttpResponseRedirect(
+            reverse('topic_detail', kwargs={'slug': obj.slug}))
 
 
 class TopicUpdate(TopicEdit, UpdateView):

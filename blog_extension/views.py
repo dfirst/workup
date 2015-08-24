@@ -39,7 +39,8 @@ class BlogActView(object):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.featured_image = self.request.POST.get('featured_image', False).replace('/static/media/', '').strip()
+        obj.featured_image = self.request.POST.get(
+            'featured_image', False).replace('/static/media/', '').strip()
         if not hasattr(obj, 'user'):
             obj.user = self.request.user
         # filter for html content by Bleach
@@ -48,12 +49,14 @@ class BlogActView(object):
         # dirty solution to save keywords
         keywords = Keyword.objects
         assigned_keywords = list()
-        request_keywords = list(set(unicode(self.request.POST.get('keywords_1', False)).replace(' ','').split(',')))
-        if len(request_keywords)>=1:
+        request_keywords = list(set(unicode(self.request.POST.get(
+            'keywords_1', False)).replace(' ', '').split(',')))
+        if len(request_keywords) >= 1:
             for keyword in request_keywords:
                 keyword = keywords.filter(title=keyword)
-                if len(keyword)>=1:
-                    assigned_keywords.append(AssignedKeyword(keyword_id=keyword[0].id))
+                if len(keyword) >= 1:
+                    assigned_keywords.append(
+                        AssignedKeyword(keyword_id=keyword[0].id))
         obj.keywords = assigned_keywords
         # dirty solution to save category
         try:
@@ -70,7 +73,8 @@ class BlogActView(object):
             )
         elif obj.status == 2:
             info(self.request, "Запись сохранена")
-            return HttpResponseRedirect(reverse('blog_post_detail', kwargs={'slug': obj.slug}))
+            return HttpResponseRedirect(
+                reverse('blog_post_detail', kwargs={'slug': obj.slug}))
 
 
 class BlogCreate(BlogActView, CreateView):
@@ -129,8 +133,8 @@ def upload(request):
     # 'file' may be a list of files.
 
     file = upload_receive(request)
-
-    if 'image' not in magic.from_buffer(file.read(), mime=True) or file.size > 1024*1024*1.5:
+    image_buffer = magic.from_buffer(file.read(), mime=True)
+    if 'image' not in image_buffer or file.size > 1024*1024*1.5:
         raise ValidationError()
 
     instance = BlogImage(image=file, user=request.user)

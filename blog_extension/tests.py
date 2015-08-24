@@ -39,33 +39,37 @@ class BlogExtensionTest(TestCase):
         Keyword.objects.create(title='test_1')
         Keyword.objects.create(title='test_2')
         # Blog create test
-        self.client_1.post(reverse('blog_create'),
-                           {'title': 'Test note',
-                            'content': 'Im testing this content and i </div>like it',
-                            'status': 1,
-                            'featured_image': '',
-                            'keywords_1': 'test_1, test_2, test_3, test_1, test_2',}
-                           )
+        self.client_1.post(
+            reverse('blog_create'),
+            {'title': 'Test note',
+             'content': 'Im testing this content and i </div>like it',
+             'status': 1,
+             'featured_image': '',
+             'keywords_1': 'test_1, test_2, test_3, test_1, test_2', }
+        )
         # Keywords test
         self.assertContains(
-            self.client_1.get(reverse('blog_edit', kwargs={'id': 1})), 'value="test_2, test_1"'
+            self.client_1.get(reverse('blog_edit', kwargs={'id': 1})),
+            'value="test_2, test_1"'
         )
         self.assertEqual(
             len(BlogPost.objects.all()[0].keywords.all()), 2
         )
         # Blog edit and html parser test
         self.assertEqual(
-            self.client_1.get(reverse('blog_edit', kwargs={'id': 1})).status_code, 200
+            self.client_1.get(
+                reverse('blog_edit', kwargs={'id': 1})).status_code, 200
         )
         self.assertContains(
             self.client_1.get(reverse('blog_edit', kwargs={'id': 1})),
             'Im testing this content and i like it'
         )
-        self.client_1.post(reverse('blog_edit', kwargs={'id': 1}),
-                           {'title': 'Test note',
-                            'content': '<script><b>So slow so tired</div></b></script>',
-                            'status': 1,
-                            'featured_image': ''})
+        self.client_1.post(
+            reverse('blog_edit', kwargs={'id': 1}),
+            {'title': 'Test note',
+             'content': '<script><b>So slow so tired</div></b></script>',
+             'status': 1,
+             'featured_image': ''})
         self.assertContains(
             self.client_1.get(reverse('blog_edit', kwargs={'id': 1})),
             '<b>So slow so tired</b>'
@@ -80,7 +84,8 @@ class BlogExtensionTest(TestCase):
             {'username': 'Tester_2', 'password': password}
         )
         self.assertEqual(
-            self.client_2.get(reverse('blog_edit', kwargs={'id': 1})).status_code, 302
+            self.client_2.get(
+                reverse('blog_edit', kwargs={'id': 1})).status_code, 302
         )
         # File upload test
         with open('static/media/avatar/default-avatar.jpg', 'r') as img:
