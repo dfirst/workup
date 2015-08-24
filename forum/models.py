@@ -43,16 +43,6 @@ class Topic(Displayable, Ownable, RichText):
     def get_absolute_url(self):
         return reverse("topic_detail", kwargs={"slug": self.slug})
 
-    @property
-    def domain(self):
-        return urlparse(self.url).netloc
-
-    @property
-    def url(self):
-        if self.link:
-            return self.link
-        return current_request().build_absolute_uri(self.get_absolute_url())
-
     def save(self, *args, **kwargs):
         keywords = []
         if not self.keywords_string and getattr(settings, "AUTO_TAG", False):

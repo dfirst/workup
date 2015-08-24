@@ -239,6 +239,7 @@ INSTALLED_APPS = (
     "django.contrib.sites",
     "django.contrib.sitemaps",
     "django.contrib.staticfiles",
+    "django_comments",
     "mezzanine.boot",
     "mezzanine.conf",
     "mezzanine.core",
@@ -350,9 +351,9 @@ OPTIONAL_APPS = (
 # ignored in your version control system allowing for settings to be
 # defined per machine.
 try:
-    from workup.prod_settings import *
+    from workup.local_settings import *
 except ImportError as e:
-    if "prod_settings" not in str(e):
+    if "local_settings" not in str(e):
         raise e
 
 
@@ -435,6 +436,8 @@ SOCIAL_AUTH_PIPELINE = (
 VK_EXTRA_DATA = ['photo_max_orig']
 
 VK_EXTRA_SCOPE = ['email']
+
+COMMENTS_ALLOW_PROFANITIES = True
 
 # Debug toolbar
 if DEBUG:

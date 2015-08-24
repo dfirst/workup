@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
 from django.template.context import RequestContext
-from django.contrib.comments import Comment
+from django_comments.models import Comment
 from django.views.generic import DetailView
 
 from workup.comments_extension import django_comments, get_edit_form
