@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.db import connection
 
 from mezzanine.core.admin import DisplayableAdmin
-from workup.forum.models import Topic
+from .models import Topic
 
 
 class TopicAdmin(DisplayableAdmin):
