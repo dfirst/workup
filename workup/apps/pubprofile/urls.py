@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, url
 
-from workup.forum.views import TopicList
-from workup.blog_extension.views import BlogPostList
-from workup.comments_extension.views.generic import CommentList
+from workup.apps.forum.views import TopicList
+from workup.apps.blog_extension.views import BlogPostList
+from workup.apps.comments_extension.views.generic import CommentList
 
 
 urlpatterns = patterns(

@@ -3,8 +3,7 @@ from __future__ import unicode_literals
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 
-from workup.forum.views import TopicList, TopicCreate, TopicDetail,\
-    TagList, TopicUpdate
+from .views import TopicList, TopicCreate, TopicDetail, TagList, TopicUpdate
 
 
 urlpatterns = patterns(

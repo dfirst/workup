@@ -4,8 +4,8 @@ from collections import defaultdict
 from mezzanine import template
 from mezzanine.generic.models import ThreadedComment
 
-from workup.core_extension.utils import order_by_score
-from workup.comments_extension.views.generic import CommentList, USER_PROFILE_RELATED_NAME
+from workup.apps.core_extension.utils import order_by_score
+from workup.apps.comments_extension.views.generic import CommentList, USER_PROFILE_RELATED_NAME
 
 
 register = template.Library()

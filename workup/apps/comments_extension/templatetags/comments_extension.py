@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from django import template
 from django.template.loader import render_to_string
 
-from workup.comments_extension import \
+from workup.apps.comments_extension import \
     django_comments, get_edit_modelform, get_edit_form_target
 
 

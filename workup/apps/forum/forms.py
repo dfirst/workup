@@ -1,5 +1,5 @@
 from django.forms.models import modelform_factory
-from workup.forum.models import Topic
+from .models import Topic
 
 
 BaseTopicForm = modelform_factory(Topic,

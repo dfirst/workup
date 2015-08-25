@@ -17,8 +17,8 @@ from mezzanine.utils.views import paginate
 from mezzanine.generic.models import AssignedKeyword, Keyword
 from jfu.http import upload_receive, UploadResponse, JFUResponse
 
-from workup.core_extension.utils import html_validator
-from workup.pubprofile.views import USER_PROFILE_RELATED_NAME, UserFilterView
+from workup.apps.core_extension.utils import html_validator
+from workup.apps.pubprofile.views import USER_PROFILE_RELATED_NAME, UserFilterView
 from .forms import CreateBlogForm
 from .models import BlogImage
 

@@ -11,7 +11,7 @@ from django.template.context import RequestContext
 from django_comments.models import Comment
 from django.views.generic import DetailView
 
-from workup.comments_extension import django_comments, get_edit_form
+from workup.apps.comments_extension import django_comments, get_edit_form
 
 
 class CommentEditBadRequest(HttpResponseBadRequest):

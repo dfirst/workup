@@ -80,10 +80,10 @@ urlpatterns += patterns(
     url(r"", include('social_auth.urls')),
     url(r'^captcha/', include('captcha.urls')),
     url(r'hitcount/', include('hitcount.urls', namespace='hitcount')),
-    url(r"^comments/", include("workup.comments_extension.urls")),
-    ("^", include("workup.blog_extension.urls")),
-    ("^", include("workup.forum.urls")),
-    ("^", include("workup.pubprofile.urls")),
+    url(r"^comments/", include("workup.apps.comments_extension.urls")),
+    ("^", include("workup.apps.blog_extension.urls")),
+    ("^", include("workup.apps.forum.urls")),
+    ("^", include("workup.apps.pubprofile.urls")),
     ("^", include("mezzanine.urls")),
 
     # MOUNTING MEZZANINE UNDER A PREFIX

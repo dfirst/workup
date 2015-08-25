@@ -12,12 +12,12 @@ from django.views.generic import CreateView, DetailView,\
 from mezzanine.generic.models import Keyword, AssignedKeyword
 from mezzanine.blog.models import BlogCategory
 
-from workup.blog_extension.models import BlogImage
-from workup.core_extension.utils import html_validator
-from workup.core_extension.views import ScoreOrderingView
-from workup.pubprofile.views import USER_PROFILE_RELATED_NAME
-from workup.forum.forms import TopicForm
-from workup.forum.models import Topic
+from workup.apps.blog_extension.models import BlogImage
+from workup.apps.core_extension.utils import html_validator
+from workup.apps.core_extension.views import ScoreOrderingView
+from workup.apps.pubprofile.views import USER_PROFILE_RELATED_NAME
+from .forms import TopicForm
+from .models import Topic
 
 
 class TopicView(object):

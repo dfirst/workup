@@ -1,7 +1,7 @@
 from mezzanine.generic.models import ThreadedComment
 
-from workup.pubprofile.views import USER_PROFILE_RELATED_NAME
-from workup.core_extension.views import ScoreOrderingView
+from workup.apps.pubprofile.views import USER_PROFILE_RELATED_NAME
+from workup.apps.core_extension.views import ScoreOrderingView
 
 
 class CommentList(ScoreOrderingView):

@@ -1,7 +1,7 @@
 from mezzanine.conf import settings
 from mezzanine.utils.views import paginate
 
-from workup.pubprofile.views import UserFilterView
+from workup.apps.pubprofile.views import UserFilterView
 from .utils import order_by_score
 
 

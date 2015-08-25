@@ -3,8 +3,7 @@ from __future__ import unicode_literals
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 
-from workup.blog_extension.views import \
-    BlogCreate, BlogUpdate, upload, upload_delete
+from .views import BlogCreate, BlogUpdate, upload, upload_delete
 
 
 urlpatterns = patterns(

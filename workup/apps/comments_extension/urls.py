@@ -1,11 +1,11 @@
 from django.conf.urls import patterns, url
 
-from workup.comments_extension.views.moderation import CommentDetail
-from workup.comments_extension.views.generic import CommentList
+from .views.moderation import CommentDetail
+from .views.generic import CommentList
 
 
 urlpatterns = patterns(
-    "workup.comments_extension.views",
+    "workup.apps.comments_extension.views",
     url(r"^edit/(\d+)/$", view="moderation.edit",
         name="comments-edit"
         ),
