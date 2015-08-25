@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from workup.secret import *
+from .secret import *
 
 
 DATABASES = {
