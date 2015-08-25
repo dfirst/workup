@@ -351,7 +351,7 @@ OPTIONAL_APPS = (
 # Allow any settings to be defined in local_settings.py which should be
 # ignored in your version control system allowing for settings to be
 # defined per machine.
-f = os.path.join(PROJECT_APP_PATH, "local.py")
+f = os.path.join(PROJECT_APP_PATH, "production.py")
 if os.path.exists(f):
     exec(open(f, "rb").read())
 
