@@ -1,0 +1,35 @@
+{% extends "accounts/account_profile.html" %}
+{% load i18n future mezzanine_tags accounts_tags comments static postman_tags %}
+{% block meta_title %}
+    {% with profile_user=user %}
+        {{ profile_user|username_or:"get_full_name" }}
+    {% endwith %}
+{% endblock %}
+{% block title %}
+    {% trans "Messaging" %}
+{% endblock %}
+{% block extrahead %}
+    {{ block.super }}
+    <link type="text/css" media="all" rel="stylesheet" href="{% static 'postman/css/postman.css' %}" />
+{% endblock %}
+{% block breadcrumb_menu %}
+    {% with profile_user=user %}
+    {{ block.super }}
+    {% endwith %}
+{% endblock %}
+{% block base %}
+    {% with profile_user=user %}
+    {{ block.super }}
+    {% endwith %}
+{% endblock %}
+{% block profile_content %}
+    <ul id="postman_menu">{% postman_unread as unread_count %}
+        <li><a href="{% url 'postman:inbox' %}">&raquo;&nbsp;{% trans "Inbox" %}{% if unread_count %} <strong>({{ unread_count }})</strong>{% endif %}</a></li>
+        <li><a href="{% url 'postman:sent' %}">&raquo;&nbsp;{% trans "Sent Messages" %}</a></li>
+        <li><a href="{% url 'postman:write' %}">&raquo;&nbsp;{% trans "Write" %}</a></li>
+        <li><a href="{% url 'postman:archives' %}">&raquo;&nbsp;{% trans "Archives" %}</a></li>
+        <li><a href="{% url 'postman:trash' %}">&raquo;&nbsp;{% trans "Trash" %}</a></li>
+    </ul>
+    {% block postman_content %}
+    {% endblock %}
+{% endblock %}
