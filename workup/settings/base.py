@@ -186,15 +186,16 @@ DATABASES = {
 #########
 
 # Full filesystem path to the project.
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = BASE_DIR = os.path.dirname(PROJECT_APP_PATH)
 
 # Name of the directory for the project.
-PROJECT_DIRNAME = PROJECT_ROOT.split(os.sep)[-1]
+PROJECT_APP = os.path.basename(PROJECT_ROOT)
 
 # Every cache key will get prefixed with this value - here we set it to
 # the name of the directory the project is in to try and use something
 # project specific.
-CACHE_MIDDLEWARE_KEY_PREFIX = PROJECT_DIRNAME
+CACHE_MIDDLEWARE_KEY_PREFIX = PROJECT_APP
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -216,7 +217,7 @@ MEDIA_URL = STATIC_URL + "media/"
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, *MEDIA_URL.strip("/").split("/"))
 
 # Package/module name to import the root urlpatterns from for the project.
-ROOT_URLCONF = "%s.urls" % PROJECT_DIRNAME
+ROOT_URLCONF = "%s.urls" % PROJECT_APP
 
 # Put strings here, like "/home/html/django_templates"
 # or "C:/www/django/templates".
@@ -253,11 +254,11 @@ INSTALLED_APPS = (
     "captcha",
     "jfu",
     "social_auth",
-    "workup.pubprofile",
-    "workup.forum",
-    "workup.comments_extension",
-    "workup.blog_extension",
-    "workup.core_extension",
+    "workup.apps.pubprofile",
+    "workup.apps.forum",
+    "workup.apps.comments_extension",
+    "workup.apps.blog_extension",
+    "workup.apps.core_extension",
     # "mezzanine.mobile",
 )
 
@@ -350,12 +351,9 @@ OPTIONAL_APPS = (
 # Allow any settings to be defined in local_settings.py which should be
 # ignored in your version control system allowing for settings to be
 # defined per machine.
-try:
-    from workup.prod_settings import *
-except ImportError as e:
-    if "prod_settings" not in str(e):
-        raise e
-
+f = os.path.join(PROJECT_APP_PATH, "local.py")
+if os.path.exists(f):
+    exec(open(f, "rb").read())
 
 ####################
 # DYNAMIC SETTINGS #
