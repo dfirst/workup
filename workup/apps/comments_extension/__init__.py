@@ -34,4 +34,4 @@ def get_edit_form_target(comment):
             hasattr(django_comments.get_comment_app(), "get_edit_form_target"):
         return django_comments.get_comment_app().get_edit_form_target()
     else:
-        return urlresolvers.reverse("workup.comments_extension.views.moderation.edit", args=(comment.id,))
+        return urlresolvers.reverse("workup.apps.comments_extension.views.moderation.edit", args=(comment.id,))

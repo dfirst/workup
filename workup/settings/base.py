@@ -437,6 +437,8 @@ VK_EXTRA_SCOPE = ['email']
 
 COMMENTS_ALLOW_PROFANITIES = True
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 # Debug toolbar
 if DEBUG:
     DEBUG_TOOLBAR_PATCH_SETTINGS = False

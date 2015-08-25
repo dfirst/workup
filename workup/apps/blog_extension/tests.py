@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.test import Client
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-
+from django.conf import settings
 from mezzanine.blog.models import BlogPost
 from mezzanine.generic.models import Keyword
 
@@ -88,7 +88,7 @@ class BlogExtensionTest(TestCase):
                 reverse('blog_edit', kwargs={'id': 1})).status_code, 302
         )
         # File upload test
-        with open('static/media/avatar/default-avatar.jpg', 'r') as img:
+        with open(settings.PROJECT_ROOT+'/static/media/avatar/default-avatar.jpg', 'r') as img:
             self.client_1.post(reverse('jfu_upload'), {'files[]': img})
         html_img = '<img src=/static/media/uploads/blog/default-avatar.jpg width=300>'
         self.assertContains(
@@ -111,4 +111,4 @@ class BlogExtensionTest(TestCase):
             self.client_1.get(reverse('blog_create')),
             html_img
         )
-        os.remove('static/media/uploads/blog/default-avatar.jpg')
+        os.remove(settings.PROJECT_ROOT+'/static/media/uploads/blog/default-avatar.jpg')

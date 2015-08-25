@@ -11,7 +11,7 @@ from mezzanine.generic.forms import RatingForm
 from mezzanine.generic.models import ThreadedComment
 from mezzanine.conf import settings
 
-from workup.forum.models import Topic
+from workup.apps.forum.models import Topic
 
 password = 'Tester'
 
