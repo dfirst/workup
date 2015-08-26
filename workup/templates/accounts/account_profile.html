@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n future mezzanine_tags accounts_tags comments %}
+{% load i18n future mezzanine_tags accounts_tags comments postman_tags %}
 
 {% block meta_title %}{{ profile_user|username_or:"get_full_name" }}{% endblock %}
 {% block title %}{{ profile_user|username_or:"get_full_name" }}{% endblock %}
@@ -22,7 +22,35 @@
                         <ul class="categories mt-20">
                             <li><a href="{% url "profile" profile_user.username %}">Персональная информация</a></li>
                             {% if profile_user == request.user %}
-                                <li><a href="{% url "profile_update" %}">{% trans "Update profile" %}</a></li>
+                                {% postman_unread as unread_count %}
+                                <li>
+                                    <a href="{% url "profile_update" %}">{% trans "Update profile" %}</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'postman:inbox' %}">
+                                        {% trans "Inbox" %}{% if unread_count %}<strong>({{ unread_count }})</strong>{% endif %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'postman:sent' %}">
+                                        {% trans "Sent Messages" %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'postman:write' %}">
+                                        {% trans "Write" %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'postman:archives' %}">
+                                        {% trans "Archives" %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'postman:trash' %}">
+                                        {% trans "Trash" %}
+                                    </a>
+                                </li>
                             {% endif %}
                         </ul>
                     </div>
