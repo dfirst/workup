@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n mezzanine_tags %}
+{% load i18n mezzanine_tags static %}
 
 {% block meta_title %}{{ title }}{% endblock %}
 {% block title %}{{ title }}{% endblock %}
@@ -96,4 +96,13 @@
             </div>
         </div>
     </section>
+{% endblock %}
+{% block extra_footer_js %}
+    <script src="{% static "js/jquery.date-dropdowns.min.js" %}"></script>
+    <script>
+        $("#id_date_of_birth").dateDropdowns({
+            submitFormat: "mm/dd/yyyy",
+            displayFormat: "mdy"
+        });
+    </script>
 {% endblock %}

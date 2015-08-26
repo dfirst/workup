@@ -402,7 +402,7 @@ HITCOUNT_KEEP_HIT_ACTIVE = {'seconds': 120}
 
 HITCOUNT_KEEP_HIT_IN_DATABASE = {'days': 10}
 
-ACCOUNTS_PROFILE_FORM_CLASS = 'workup.pubprofile.forms.ProfileFormCustom'
+ACCOUNTS_PROFILE_FORM_CLASS = 'workup.apps.pubprofile.forms.ProfileFormCustom'
 
 # social_auth settings
 
