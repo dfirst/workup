@@ -251,6 +251,7 @@ INSTALLED_APPS = (
     "mezzanine.twitter",
     "mezzanine.accounts",
     "hitcount",
+    "widget_tweaks",
     "postman",
     "captcha",
     "jfu",
