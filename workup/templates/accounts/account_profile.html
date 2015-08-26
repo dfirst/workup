@@ -15,6 +15,7 @@
         <div class="wp-section user-account">
             <div class="container">
                 <div class="row">
+                    {% include "includes/django_messages.html" %}
                     <div class="col-md-3">
                         <div class="user-profile-img">
                             <img src="{{ MEDIA_URL }}{% thumbnail profile_user.userprofile.avatar 263 263 %}" alt="">
