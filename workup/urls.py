@@ -81,6 +81,7 @@ urlpatterns += patterns(
     url(r'^captcha/', include('captcha.urls')),
     url(r'hitcount/', include('hitcount.urls', namespace='hitcount')),
     url(r"^comments/", include("workup.apps.comments_extension.urls")),
+    (r'^messages/', include('postman.urls', namespace='postman', app_name='postman')),
     ("^", include("workup.apps.blog_extension.urls")),
     ("^", include("workup.apps.forum.urls")),
     ("^", include("workup.apps.pubprofile.urls")),

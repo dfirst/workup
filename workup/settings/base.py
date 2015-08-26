@@ -251,6 +251,8 @@ INSTALLED_APPS = (
     "mezzanine.twitter",
     "mezzanine.accounts",
     "hitcount",
+    "widget_tweaks",
+    "postman",
     "captcha",
     "jfu",
     "social_auth",
@@ -438,6 +440,18 @@ VK_EXTRA_SCOPE = ['email']
 COMMENTS_ALLOW_PROFANITIES = True
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+# Postman settings
+
+POSTMAN_DISALLOW_ANONYMOUS = True
+
+POSTMAN_DISALLOW_MULTIRECIPIENTS = True
+
+POSTMAN_DISALLOW_COPIES_ON_REPLY = True
+
+POSTMAN_DISABLE_USER_EMAILING = True
+
+POSTMAN_AUTO_MODERATE_AS = True
 
 # Debug toolbar
 if DEBUG:

@@ -5,6 +5,8 @@ django-simple-captcha
 pyflakes
 pep8
 django_compressor
+django-postman
 django-social-auth
+django-widget-tweaks
 django-jfu
 python-magic

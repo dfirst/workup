@@ -1,0 +1,56 @@
+{% extends "postman/base.html" %}
+{% load i18n widget_tweaks %}
+{% block extrahead %}
+    {{ block.super }}
+    {% if autocompleter_app.is_active %}
+    {% load static %}
+        <script type="text/javascript"src="{% static 'admin/js/jquery.min.js' %}"></script>
+        {% if autocompleter_app.name == "ajax_select" %}
+            {% if autocompleter_app.version == "1.1.4" or autocompleter_app.version == "1.1.5" %}
+                <script type="text/javascript" src="{% static 'js/jquery.autocomplete.min.js' %}"></script>
+                <link type="text/css" media="all" rel="stylesheet" href="{% static 'css/jquery.autocomplete.css' %}" />
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    {{ form.media }}{# for ajax_selects (v1.3.6 at least) #}
+{% endblock %}
+{% block postman_content %}
+    <div id="postman">
+        <h1>{% block pm_write_title %}{% endblock %}</h1>
+        <form action="{% if next_url %}?next={{ next_url|urlencode }}{% endif %}" method="post" class="sky-form">
+            {% csrf_token %}
+            <fieldset class="no-padding">
+                {% block pm_write_recipient %}{% endblock %}
+                <section>
+                {% for field in form %}
+                    {% if field.is_hidden %}
+                        {{ field }}
+                    {% else %}
+                        <div class="form-group input_{{ field.id_for_label }} {{ field.field.type }}
+                            {% if field.errors %} has-error{% endif %}">
+                            {% if field.label %}
+                                <label class="label" for="{{ field.auto_id }}">
+                                    {{ field.label }}
+                                </label>
+                            {% endif %}
+                            <label class="input" for="file">
+                                {% render_field field class="form-control" %}
+                            </label>
+                            {% if field.errors %}
+                                <p class="help-block">
+                                    {% for e in field.errors %}
+                                        {% if not forloop.first %} / {% endif %}{{ e }}
+                                    {% endfor %}
+                                </p>
+                            {% elif field.help_text %}
+                                <p class="help-block">{{ field.help_text }}</p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </section>
+            </fieldset>
+            <button type="submit">{% trans "Send" %}</button>
+        </form>
+    </div>
+{% endblock %}
