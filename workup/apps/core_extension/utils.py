@@ -59,7 +59,7 @@ def filter_class(name, value):
 allowed_tags = ("a", "b", "blockquote", "br", "dd", "div", "dl", "dt", "em",
                 "h1", "h2", "h3", "h4", "h5", "h6", "i", "img", "li", "ol",
                 "p", "s", "span", "strong", "table", "tbody", "td", "tfoot",
-                "th", "thead", "tr", "tt", "u", "ul")
+                "th", "thead", "tr", "tt", "u", "ul", "code", "pre")
 
 
 allowed_attrs = {
