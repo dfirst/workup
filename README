@@ -47,5 +47,5 @@ comments email required hack ---> mezzanine.generic.forms.
     class ThreadedCommentForm(CommentForm, Html5Mixin):
         email = forms.EmailField(label=_("Email"),
             help_text=_("required (not published)"), required=False)
-test
+
 googleapi fonts ---> sky-forms.css global-style.css
